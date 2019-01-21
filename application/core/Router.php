@@ -1,8 +1,8 @@
 <?php 
 
-namespace application\core; //пространство имен
+namespace application\core; 
 
-use application\core\View;	//используем класс View
+use application\core\View;	
 
 class Router {
 
