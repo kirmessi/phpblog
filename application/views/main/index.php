@@ -1,3 +1,4 @@
+
 <header class="masthead" style="background-image: url('/images/home-bg.jpg')">
     <div class="container">
         <div class="row">
@@ -22,14 +23,12 @@
                             <h2 class="post-title"><?php echo htmlspecialchars($val['name'], ENT_QUOTES); ?></h2>
                             <h5 class="post-subtitle"><?php echo htmlspecialchars($val['description'], ENT_QUOTES); ?></h5>
                         </a>
-                        <p class="post-meta">Идентфикатор этого поста <?php echo $val['id']; ?></p>
+                       
+                        <p class="post-meta">Создано: <?php echo date_create($val['date'])->Format('d.m.Y');?> в <?php echo date_create($val['date'])->Format('H:i');?> </p>
                     </div>
                     <hr>
                 <?php endforeach; ?>
-                <div class="clearfix">
-                    <?php echo $pagination; ?>
-                </div>
-            <?php endif; ?>
+                            <?php endif; ?>
         </div>
     </div>
 </div>

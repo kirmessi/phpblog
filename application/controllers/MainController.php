@@ -10,7 +10,11 @@ class MainController extends Controller {
 	
 	public function indexAction(){ //главная
 
-		$this->view->render('Home');	
+		$vars = [
+			//'pagination' => $pagination->get(),
+			'list' => $this->model->postsList($this->route),
+		];
+		$this->view->render('Home', $vars);	
 	}
 	
 	public function contactAction(){ //контакты

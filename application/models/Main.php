@@ -6,11 +6,6 @@ use application\core\Model;
 class Main extends Model {
 	
 
-/*	public function getNews(){
-		$result = $this->db->row('SELECT title,description FROM news'); //выборка 
-		return $result;
-	}
-*/
 	public $error;
 
 	public function contactValidate($post) {
@@ -33,11 +28,7 @@ class Main extends Model {
 	}
 
 	public function postsList($route) {
-		$max = 10;
-		$params = [
-			'max' => $max,
-			'start' => ((($route['page'] ?? 1) - 1) * $max),
-		];
-		return $this->db->row('SELECT * FROM posts ORDER BY id DESC LIMIT :start, :max', $params);
+		
+		return $this->db->row('SELECT * FROM posts ORDER BY id DESC ');
 	}
 }
