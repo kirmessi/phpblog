@@ -3,13 +3,10 @@ require '../application/lib/Dev.php';
 define('PATH',realpath(dirname(__FILE__).'/../').'/');
 
 spl_autoload_register('autoload');
-function autoload($class)
 
-{
+function autoload($class){
 	$file = str_replace('\\', '/', $class.'.php');
-	
-    $path = PATH.$file;
-
+	$path = PATH.$file;
    if (file_exists($path)) {
    	require $path;
    }

@@ -1,4 +1,4 @@
-\<?php // debug($list);?>
+<?php  //debug($list);?>
 <?php  //debug($data);?>
 <div class="content-wrapper">
     <div class="container-fluid">
@@ -32,11 +32,9 @@
                               
                             <select class="form-control select2 select2-hidden-accessible" name="category_id" data-placeholder="Select a Category" style="width: 100%;" tabindex="-1" aria-hidden="true">
                                <?php foreach ($list as $category): ?>
-                             <option value <?php if ($category['category_id'] == $data['category_id']): ?>
+                             <option value ="<?php echo $category['category_id'];?>" <?php if ($category['category_id'] == $data['category_id']): ?>
                                  selected
-                             <?php endif ?>
-
-                             ="<?php echo $category['category_id'];?>"><?php echo $category['name'];?></option>
+                             <?php endif ?>><?php echo $category['name'];?></option>
                             <?php endforeach ?>
                     
                             </select>

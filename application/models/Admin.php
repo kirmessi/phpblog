@@ -82,7 +82,8 @@ class Admin extends Model {
 			'description' => $post['description'],
 			'text' => $post['text'],
 		];
-		$this->db->query('UPDATE posts SET slug = :slug, category_id = :category_id, name = :name,  description = :description, text = :text WHERE id = :id', $params);
+		
+		return $this->db->query('UPDATE posts SET id = :id, slug = :slug, category_id = :category_id, name = :name,  description = :description, text = :text WHERE id = :id', $params);
 			
 	}
 
