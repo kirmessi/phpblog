@@ -19,9 +19,13 @@ return [
 	'admin' => [
 
 		'logout',
-		'add',
-		'edit',
-		'delete',
+		'postadd',
+		'postedit',
+		'postdelete',
 		'posts',
+		'categories',
+		'categoryadd',
+		'categoryedit',
+		'categorydelete',
 	],
 ];

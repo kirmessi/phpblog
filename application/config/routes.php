@@ -17,10 +17,15 @@ return [
 		'controller' => 'main',
 		'action' => 'contact',
 	],
-
-	'post/{id:\d+}' => [
+//{slug:[\w-]+}
+	
+	'post/{slug:[\w-]+}' => [
 		'controller' => 'main',
 		'action' => 'post',
+	],
+	'category/{slug:[\w-]+}' => [
+		'controller' => 'main',
+		'action' => 'category',
 	],
 //AdminContoller
 	'admin' => [
@@ -33,25 +38,43 @@ return [
 		'action' => 'logout',
 	],
 
-	'admin/add' => [
+	'admin/post/add' => [
 		'controller' => 'admin',
-		'action' => 'add',
+		'action' => 'postadd',
 	],
 
-	'admin/edit/{id:\d+}' => [
+
+	'admin/post/edit/{id:\d+}' => [
 		'controller' => 'admin',
-		'action' => 'edit',
+		'action' => 'postedit',
 	],
 
-	'admin/delete/{id:\d+}' => [
+	'admin/post/delete/{id:\d+}' => [
 		'controller' => 'admin',
-		'action' => 'delete',
+		'action' => 'postdelete',
+	],
+
+	'admin/category/add' => [
+		'controller' => 'admin',
+		'action' => 'categoryadd',
+	],
+	'admin/category/edit/{id:\d+}' => [
+		'controller' => 'admin',
+		'action' => 'categoryedit',
+	],
+	
+	'admin/category/delete/{id:\d+}' => [
+		'controller' => 'admin',
+		'action' => 'categorydelete',
 	],
 
 	'admin/posts' => [
 		'controller' => 'admin',
 		'action' => 'posts',
 	],
-
+	'admin/categories' => [
+		'controller' => 'admin',
+		'action' => 'categories',
+	],
 
 ];

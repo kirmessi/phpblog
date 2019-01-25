@@ -1,11 +1,19 @@
-<?php //debug($list);?>
+
 <header class="masthead" style="background-image: url('/images/home-bg.jpg')">
     <div class="container">
         <div class="row">
             <div class="col-lg-8 col-md-10 mx-auto">
                 <div class="site-heading">
-                    <h1>PHP Framework</h1>
-                    <span class="subheading">i'm a simple blog on PHP-OOP-MVC</span>
+				<?php 
+        $newArr = array();
+        foreach ($list as $val) {
+            $newArr[$val['cat_name']] = $val;
+          
+        }
+         foreach ($newArr as $val): ?>
+                    <h1><?php echo $val['cat_name'];?></h1>
+                    <span class="subheading"><?php echo $val['cat_desc'];?></span>
+                    <?php endforeach; ?>
                 </div>
             </div>
         </div>
@@ -25,8 +33,7 @@
                         </a>
                        <div class="row">
                         <div class="col-6">Создано: <?php echo date_create($val['date'])->Format('d.m.Y');?> в <?php echo date_create($val['date'])->Format('H:i');?> </div>
-                        <div class="col-6"><a href="/category/<?php echo $val['cat_slug'];?>"><?php echo $val['cat_name'];?></a></div>
-                        </div>
+                        
                     </div>
                     <hr>
                 <?php endforeach; ?>

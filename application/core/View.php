@@ -10,7 +10,7 @@ class View {
 	
 	public function __construct($route){
 		
-		$this->route = $route; //массив кконтроллера и экшена
+		$this->route = $route; //массив контроллера и экшена
 		$this->path = $route['controller'].'/'.$route['action']; // "main/index"
 
 		

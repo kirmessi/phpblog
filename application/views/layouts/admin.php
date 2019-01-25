@@ -22,18 +22,37 @@
                 </button>
                 <div class="collapse navbar-collapse" id="navbarResponsive">
                     <ul class="navbar-nav navbar-sidenav" id="exampleAccordion">
-                        <li class="nav-item">
-                            <a class="nav-link" href="/admin/add">
-                            <i class="fa fa-fw fa-plus"></i>
-                            <span class="nav-link-text">Добавить пост</span>
-                            </a>
-                        </li>
+                       
                         <li class="nav-item">
                             <a class="nav-link" href="/admin/posts">
                             <i class="fa fa-fw fa-list"></i>
                             <span class="nav-link-text">Посты</span>
                             </a>
                         </li>
+                        <ul class="submenu">
+                         <li class="nav-item">
+                            <a class="nav-link" href="/admin/post/add">
+                            <i class="fa fa-fw fa-plus"></i>
+                            <span class="nav-link-text">Добавить пост</span>
+                            </a>
+                        </li>
+                        </ul>
+                       
+                        <li class="nav-item">
+                            <a class="nav-link" href="/admin/categories">
+                            <i class="fa fa-fw fa-list"></i>
+                            <span class="nav-link-text">Категории</span>
+                            </a>
+                        </li>
+                        <ul class="submenu">
+                         <li class="nav-item">
+                            <a class="nav-link" href="/admin/category/add">
+                            <i class="fa fa-fw fa-plus"></i>
+                            <span class="nav-link-text">Добавить Категорию</span>
+                            </a>
+                        </li>
+                        </ul>
+                                                         
                         <li class="nav-item">
                             <a class="nav-link" href="/admin/logout">
                             <i class="fa fa-fw fa-sign-out"></i>

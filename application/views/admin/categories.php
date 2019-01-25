@@ -1,7 +1,9 @@
+
+
 <div class="content-wrapper">
     <div class="container-fluid">
         <div class="card mb-3">
-            <div class="card-header">Посты</div>
+            <div class="card-header">Категории</div>
             <div class="card-body">
                 <div class="row">
                     <div class="col-sm-4">
@@ -17,8 +19,8 @@
                                 <?php foreach ($list as $val): ?>
                                     <tr>
                                         <td><?php echo htmlspecialchars($val['name'], ENT_QUOTES); ?></td>
-                                        <td><a href="/admin/post/edit/<?php echo $val['id']; ?>" class="btn btn-primary">Редактировать</a></td>
-                                        <td><a href="/admin/post/delete/<?php echo $val['id']; ?>" class="btn btn-danger">Удалить</a></td>
+                                        <td><a href="/admin/category/edit/<?php echo $val['category_id']; ?>" class="btn btn-primary">Редактировать</a></td>
+                                        <td><a href="/admin/category/delete/<?php echo $val['category_id']; ?>" class="btn btn-danger">Удалить</a></td>
                                     </tr>
                                 <?php endforeach; ?>
                             </table>

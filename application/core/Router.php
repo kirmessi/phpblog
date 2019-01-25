@@ -15,25 +15,29 @@ class Router {
 		foreach ($arr as $key => $value) {
 			$this->add($key,$value); //записываем в function Add() - $route and $params
 		}
+		
 
 	}
 
 	public function add($route, $params){
-		$route = preg_replace('/{([a-z]+):([^\}]+)}/', '(?P<\1>\2)', $route);
 
+		$route = preg_replace('/{(slug):([^\}]+)}/', '(?P<slug>[-\w]+)', $route);
+		$route = preg_replace('/{(id):([^\}]+)}/', '(?P<\1>\2)', $route);
 		$route = '#^'.$route.'$#'; //регулярное выражение 
 		$this->routes[$route] = $params; //записали в массив контроллера и экшен
 		
 	}
 
 	public function match(){   //проверка совпадения роута  из массива и текущего адреса
+		//debug($this->routes);
 		
-
 		$url = trim($_SERVER['REQUEST_URI'],'/'); //убераем '/' у текущего url
-
+	
 		foreach ($this->routes as $route => $params) {
 			if (preg_match($route, $url, $matches)) { //Выполняет проверку на соответствие регулярному выражению
+				
 				foreach ($matches as $key => $match) {
+					
                     if (is_string($key)) {
                         if (is_numeric($match)) {
                             $match = (int) $match;
@@ -41,7 +45,8 @@ class Router {
                         $params[$key] = $match;
                     }
                 }
-				$this->params = $params;
+				$this->params = $params; //запсиали в перменную масси контроллера и экшена
+				
 			
 				return true; //если маршрут найдено возвращает true
 			}

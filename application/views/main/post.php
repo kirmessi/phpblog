@@ -1,3 +1,4 @@
+<?php //debug($data);?>
 <header class="masthead" style="background-image: url('/materials/<?php echo $data['id']; ?>.jpg')">
     <div class="container">
         <div class="row">

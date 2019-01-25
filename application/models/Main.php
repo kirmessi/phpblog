@@ -29,6 +29,13 @@ class Main extends Model {
 
 	public function postsList($route) {
 		
-		return $this->db->row('SELECT * FROM posts ORDER BY id DESC ');
+		return $this->db->row('SELECT posts.*, categories.`name` as `cat_name`, categories.`slug` as `cat_slug`FROM posts INNER JOIN categories ON (posts.`category_id`= categories.`category_id`) ORDER BY id DESC ');
 	}
+
+	public function categorypostsList($slug) {
+		
+		return $this->db->row('SELECT posts.*, categories.`name` as `cat_name`, categories.`description` as `cat_desc` FROM posts INNER JOIN categories ON (posts.`category_id`= categories.`category_id`) WHERE categories.`slug` ="'.$slug.'"');
+	}
+
+	
 }

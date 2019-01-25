@@ -16,6 +16,7 @@ class MainController extends Controller {
 		];
 		$this->view->render('Home', $vars);	
 	}
+
 	
 	public function contactAction(){ //контакты
 
@@ -39,14 +40,25 @@ class MainController extends Controller {
 
 	public function postAction() {
 		$adminModel = new Admin;
-		if (!$adminModel->isPostExists($this->route['id'])) {
+		if (!$adminModel->isPostExists($this->route['slug'])) {
 			$this->view->errorCode(404);
 		}
 		$vars = [
-			'data' => $adminModel->postData($this->route['id'])[0],
+			'data' => $adminModel->postData($this->route['slug'])[0],
 		];
 		$this->view->render('Пост', $vars);
 	}
 
+	public function categoryAction() {
+
+		$adminModel = new Admin;
+		if (!$adminModel->isCategoryExists($this->route['slug'])) {
+			$this->view->errorCode(404);
+		}
+		$vars = [
+			'list' => $this->model->categorypostsList($this->route['slug']),
+		];
+		$this->view->render('Категория', $vars);
+	}
 
 }
