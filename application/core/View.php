@@ -18,8 +18,7 @@ class View {
 	}
 
 	public function render($title, $vars = []) { //HTML render code
-		
-		
+			
 		extract($vars); //Импортирует переменные из массива, ключ становится переменной
 		$path = PATH.'application/views/'.$this->path.'.php'; ///записываем в переменную путь к вьюхе
 		
