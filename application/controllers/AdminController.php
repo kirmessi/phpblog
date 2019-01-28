@@ -3,7 +3,7 @@
 namespace application\controllers; 
 
 use application\core\Controller;
-use application\lib\Pagination;
+//use application\lib\Pagination;
 use application\models\Main;
 
 class AdminController extends Controller {
