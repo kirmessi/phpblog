@@ -1,18 +1,10 @@
-<header class="masthead" style="background-image: url('/images/contact-bg.jpg')">
-    <div class="container">
-        <div class="row">
-            <div class="col-lg-8 col-md-10 mx-auto">
-                <div class="page-heading">
-                    <h1>Contact </h1>
-                    <span class="subheading">Fell free to contact me</span>
-                </div>
-            </div>
-        </div>
-    </div>
-</header>
-<div class="container">
-    <div class="row">
-        <div class="col-lg-8 col-md-10 mx-auto">
+{% extends "index.php" %}
+{% block title %}Contact{% endblock %}
+{% block sliderimage %}<header class="masthead" style="background-image: url('/images/contact-bg.jpg')">{% endblock %}
+
+                  {% block slidertitle %}Contact{% endblock %} 
+                   {% block subslidertitle %}Fell free to contact me{% endblock %}
+            {% block content %}
             <form action="/contact" method="post">
                 <div class="control-group">
                     <div class="form-group floating-label-form-group controls">
@@ -35,6 +27,4 @@
                     <button type="submit" name="Enter" class="btn btn-secondary" id="sendMessageButton">Send</button>
                 </div>
             </form>
-        </div>
-    </div>
-</div>
+            {% endblock %}

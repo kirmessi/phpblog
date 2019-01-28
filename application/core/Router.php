@@ -11,7 +11,7 @@ class Router {
 	
 	function __construct(){
 			
-		$arr = require '../application/config/routes.php'; // подключаем массив роутов
+		$arr = require PATH.'application/config/routes.php'; // подключаем массив роутов
 		foreach ($arr as $key => $value) {
 			$this->add($key,$value); //записываем в function Add() - $route and $params
 		}
