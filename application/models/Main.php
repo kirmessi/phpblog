@@ -37,5 +37,9 @@ class Main extends Model {
 		return $this->db->row('SELECT posts.*, categories.`name` as `cat_name`, categories.`description` as `cat_desc` FROM posts INNER JOIN categories ON (posts.`category_id`= categories.`category_id`) WHERE categories.`slug` ="'.$slug.'"');
 	}
 
-	
+	public function categorySelected($slug) {
+		
+		return $this->db->row('SELECT * FROM categories WHERE categories.`slug` ="'.$slug.'"');
+	}
+
 }

@@ -7,19 +7,25 @@ use application\lib\Db;
 use application\models\Admin;
 
 class MainController extends Controller {
-	
-	public function indexAction(){ //главная
 
+
+
+	public function indexAction(){ //главная
+	include PATH.'application/lib/Dev.php';
 		$vars = [
 			//'pagination' => $pagination->get(),
 			'list' => $this->model->postsList($this->route),
 		];
-		$this->view->render('Home', $vars);	
+		
+		$temple = $twig->loadTemplate($this->route['action'].'.php');
+		//$this->view->render('Home', $vars);	
+		echo $temple->render($vars);
+		
 	}
 
 	
 	public function contactAction(){ //контакты
-
+	include PATH.'application/lib/Dev.php';
 		if (!empty($_POST)) {
 			if (!$this->model->contactValidate($_POST)) {
 				$this->view->message('Error' ,$this->model->error);
@@ -28,14 +34,16 @@ class MainController extends Controller {
 			$this->view->message('Success' ,'Ваше сообщение успешно отправлено');
 		}
 
-		$this->view->render('Contact');
+		$temple = $twig->loadTemplate($this->route['action'].'.php');
+		echo $temple->render(array());
 	
 
 	}
 
 	public function aboutAction(){ //о нас
-
-		$this->view->render('About');
+	include PATH.'application/lib/Dev.php';
+	$temple = $twig->loadTemplate($this->route['action'].'.php');
+	echo $temple->render(array());
 	}
 
 	public function postAction() {
@@ -46,8 +54,10 @@ class MainController extends Controller {
 		$vars = [
 			'data' => $adminModel->postData($this->route['slug'])[0],
 		];
-		$this->view->render('Пост', $vars);
-	}
+		include PATH.'application/lib/Dev.php';
+		$temple = $twig->loadTemplate($this->route['action'].'.php');
+		echo $temple->render($vars);
+		}
 
 	public function categoryAction() {
 
@@ -57,8 +67,11 @@ class MainController extends Controller {
 		}
 		$vars = [
 			'list' => $this->model->categorypostsList($this->route['slug']),
+			'category'=>$this->model->categorySelected($this->route['slug']), 
 		];
-		$this->view->render('Категория', $vars);
+		include PATH.'application/lib/Dev.php';
+		$temple = $twig->loadTemplate($this->route['action'].'.php');
+		echo $temple->render($vars);
 	}
 
 }

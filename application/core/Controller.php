@@ -44,7 +44,7 @@ abstract class Controller {
 
 	public function checkAcl(){ //котроль доступа
 
-		$this->acl = require '../application/acl/'.$this->route['controller'].'.php'; //подключает массив по контроллеру
+		$this->acl = require PATH.'application/acl/'.$this->route['controller'].'.php'; //подключает массив по контроллеру
 
 		if ($this->isAcl('all')) { //уровень доступа дял всех  
 			return true;
