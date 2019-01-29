@@ -13,7 +13,7 @@
         </a>
         <div class="row">
         <div class="col-6">Создано: {{val.date}}</div>
-        <div class="col-6"><a href="/category/{{val.cat_slug}}">{{val.cat_name}}</a></div>
+      
         </div>                    
     </div>
     <hr>

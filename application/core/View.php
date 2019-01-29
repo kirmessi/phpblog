@@ -14,11 +14,12 @@ class View {
 		
 		$this->route = $route; //массив контроллера и экшена
 		$this->path = $route['controller'].'/'.$route['action']; // "main/index"
-					
+				
 	}
 
 	public function render($title, $vars = []) { //HTML render code
-			
+		
+		
 		extract($vars); //Импортирует переменные из массива, ключ становится переменной
 		$path = PATH.'application/views/'.$this->path.'.php'; ///записываем в переменную путь к вьюхе
 		
@@ -33,7 +34,12 @@ class View {
 
 		}
 	}
+	public function rendertwig($route,$vars) { //HTML render code
+		require PATH.'application/lib/Dev.php';
 
+		$temple = $twig->loadTemplate($route['action'].'.php');
+		echo $temple->render($vars);
+	}
 	public static function errorCode($code){
 
 		http_response_code($code);
