@@ -1,10 +1,45 @@
-<header class="masthead" style="background-image: url('/images/home-bg.jpg')">
+
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <title>{% block title %}Home{% endblock %}</title>
+        <link href="/styles/bootstrap.css" rel="stylesheet">
+        <link href="/styles/main.css" rel="stylesheet">
+        <link href="/styles/font-awesome.css" rel="stylesheet">
+        <script src="/scripts/jquery.js"></script>
+        <script src="/scripts/form.js"></script>
+        <script src="/scripts/popper.js"></script>
+        <script src="/scripts/bootstrap.js"></script>
+    </head>
+    <body>
+        <nav class="navbar navbar-expand-lg navbar-light fixed-top" id="mainNav">
+            <div class="container">
+                <a class="navbar-brand" href="/">PHP-Blog</a>
+                <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+                    <i class="fa fa-bars"></i>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarResponsive">
+                    <ul class="navbar-nav ml-auto">
+                        <li class="nav-item">
+                            <a class="nav-link" href="/about">About</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/contact">Contacts</a>
+                        </li>
+                        
+                    </ul>
+                </div>
+            </div>
+        </nav>
+      {% block sliderimage %}<header class="masthead" style="background-image: url('/images/home-bg.jpg')">{% endblock %}
     <div class="container">
         <div class="row">
             <div class="col-lg-8 col-md-10 mx-auto">
                 <div class="site-heading">
-                    <h1>PHP Framework</h1>
-                    <span class="subheading">i'm a simple blog on PHP-OOP-MVC</span>
+                    <h1>{% block slidertitle %}PHP Framework{% endblock %}</h1>
+                    <span class="subheading">{% block subslidertitle %}i'm a simple blog on PHP-OOP-MVC{% endblock %}</span>
                 </div>
             </div>
         </div>
@@ -13,23 +48,27 @@
 <div class="container">
     <div class="row">
         <div class="col-lg-8 col-md-10 mx-auto">
-            <?php if (empty($list)): ?>
-                <p>List of posts not found</p>
-            <?php else: ?>
-                <?php foreach ($list as $val): ?>
+        {% block content %}
+                {% for val in list %}
                     <div class="post-preview">
-                        <a href="/post/<?php echo $val['id']; ?>">
-                            <h2 class="post-title"><?php echo htmlspecialchars($val['name'], ENT_QUOTES); ?></h2>
-                            <h5 class="post-subtitle"><?php echo htmlspecialchars($val['description'], ENT_QUOTES); ?></h5>
+                        <a href="/post/{{val.slug}}">
+                            <h2 class="post-title">{{val.name}}</h2>
+                            <h5 class="post-subtitle">{{val.description}}</h5>
                         </a>
-                        <p class="post-meta">Идентфикатор этого поста <?php echo $val['id']; ?></p>
+                       <div class="row">
+                        <div class="col-6">Создано: {{val.date}}</div>
+                        <div class="col-6"><a href="/category/{{val.cat_slug}}">{{val.cat_name}}</a></div>
+                        </div>
                     </div>
                     <hr>
-                <?php endforeach; ?>
-                <div class="clearfix">
-                    <?php echo $pagination; ?>
-                </div>
-            <?php endif; ?>
+                  {% endfor %}
+        {% endblock %}          
         </div>
     </div>
 </div>
+        <hr>
+     
+    </body>
+</html>
+
+

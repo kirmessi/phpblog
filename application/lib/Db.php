@@ -24,25 +24,26 @@ class Db {
 				} else {
 					$type = PDO::PARAM_STR;
 				}
-				$stmt->bindValue(':'.$key, $val, $type);
+				$stmt->bindValue(':'.$key, $val, $type); // Связывает параметр с заданным значением
 			}
 		}
-		$stmt->execute();
+		$stmt->execute(); //Запускает подготовленный запрос на выполнение
 		return $stmt;
 	}
 
 	public function row($sql, $params = []) {
 		$result = $this->query($sql, $params);
-		return $result->fetchAll(PDO::FETCH_ASSOC);
+		return $result->fetchAll(PDO::FETCH_ASSOC); //Извлекает результирующий ряд в виде ассоциативного массива
 	}
 
 	public function column($sql, $params = []) {
 		$result = $this->query($sql, $params);
-		return $result->fetchColumn();
+		return $result->fetchColumn(); // Возвращает данные одного столбца следующей строки результирующего набора
 	}
 
 	public function lastInsertId() {
-		return $this->db->lastInsertId();
+		return $this->db->lastInsertId(); //Возвращает ID последней вставленной строки или значение последовательности
 	}
 
 }
+

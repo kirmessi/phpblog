@@ -9,6 +9,7 @@ return [
 		'contact',
 		'about',
 		'post',
+		'category',
 	],
 	'authorize' => [
 

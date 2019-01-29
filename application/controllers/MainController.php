@@ -7,14 +7,17 @@ use application\lib\Db;
 use application\models\Admin;
 
 class MainController extends Controller {
-	
 	public function indexAction(){ //главная
-
-		$this->view->render('Home');	
+		$vars = [
+			//'pagination' => $pagination->get(),
+			'list' => $this->model->postsList($this->route),
+		];
+		
+		$this->view->rendertwig($this->route,$vars);	
 	}
-	
-	public function contactAction(){ //контакты
 
+	public function contactAction(){ //контакты
+		
 		if (!empty($_POST)) {
 			if (!$this->model->contactValidate($_POST)) {
 				$this->view->message('Error' ,$this->model->error);
@@ -22,27 +25,34 @@ class MainController extends Controller {
 			mail('test@utoo.email', 'Сообщение из блога', $_POST['name'].'|'.$_POST['email'].'|'.$_POST['text']);
 			$this->view->message('Success' ,'Ваше сообщение успешно отправлено');
 		}
-
-		$this->view->render('Contact');
-	
-
+		$this->view->rendertwig($this->route,array());	
 	}
 
 	public function aboutAction(){ //о нас
-
-		$this->view->render('About');
+		$this->view->rendertwig($this->route,array());	
 	}
 
 	public function postAction() {
 		$adminModel = new Admin;
-		if (!$adminModel->isPostExists($this->route['id'])) {
+		if (!$adminModel->isPostExists($this->route['slug'])) {
 			$this->view->errorCode(404);
 		}
 		$vars = [
-			'data' => $adminModel->postData($this->route['id'])[0],
+			'data' => $adminModel->postData($this->route['slug'])[0],
 		];
-		$this->view->render('Пост', $vars);
-	}
+		$this->view->rendertwig($this->route,$vars);
+		}
 
+	public function categoryAction() {
+		$adminModel = new Admin;
+		if (!$adminModel->isCategoryExists($this->route['slug'])) {
+			$this->view->errorCode(404);
+		}
+		$vars = [
+			'list' => $this->model->categorypostsList($this->route['slug']),
+			'category'=>$this->model->categorySelected($this->route['slug']), 
+		];
+		$this->view->rendertwig($this->route,$vars);
+	}
 
 }

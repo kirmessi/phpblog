@@ -15,10 +15,13 @@ abstract class Controller {
 	public function __construct($route){
 		
 		$this->route = $route;
+		//debug($route);
 		//$_SESSION['admin'] =1;
+		//debug($this->checkAcl());
 		if (!$this->checkAcl()) { 
 			View::errorCode('403'); //если не подходит под условия checkAcl() ошибка доступа
 		}
+
 				
 		$this->view = new View($route); // создание экземпляра класса 
 		$this->model = $this->loadModel($route['controller']); // подгружаем модель по $path контроллера
@@ -41,7 +44,8 @@ abstract class Controller {
 
 	public function checkAcl(){ //котроль доступа
 
-		$this->acl = require '../application/acl/'.$this->route['controller'].'.php'; //подключает массив по контроллеру
+		$this->acl = require PATH.'application/acl/'.$this->route['controller'].'.php'; //подключает массив по контроллеру
+
 		if ($this->isAcl('all')) { //уровень доступа дял всех  
 			return true;
 		}
@@ -52,6 +56,7 @@ abstract class Controller {
 			return true;
 		}
 		elseif  (isset($_SESSION['admin']) and $this->isAcl('admin')) { //для админа
+
 			return true;
 		}
 		return false;
