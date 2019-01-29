@@ -17,7 +17,7 @@ class View {
 				
 	}
 
-	public function render($title, $vars = []) { //HTML render code
+	public function render($title, $vars = []) { //HTML render code for admin-panel
 		
 		
 		extract($vars); //Импортирует переменные из массива, ключ становится переменной

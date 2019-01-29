@@ -8,7 +8,6 @@ use application\models\Admin;
 
 class MainController extends Controller {
 	public function indexAction(){ //главная
-		//include PATH.'application/lib/Dev.php';
 		$vars = [
 			//'pagination' => $pagination->get(),
 			'list' => $this->model->postsList($this->route),
