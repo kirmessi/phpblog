@@ -23,6 +23,46 @@ class Main extends Model {
 		}
 		return true;
 	}
+
+	public function registerValidate($post) {
+		 
+    
+		$nameLen = iconv_strlen($_POST['username']);
+		$textLen = iconv_strlen($_POST['password']);
+		if ($nameLen < 3 or $nameLen > 20) {
+			$this->error = 'Username должно содержать от 3 до 20 символов';
+			return false;
+		} elseif (!filter_var($post['email'], FILTER_VALIDATE_EMAIL)) {
+			$this->error = 'E-mail указан неверно';
+			return false;
+		} elseif ($post['password'] !== $post['repassword']) {
+			$this->error = 'Пароли не совпадают';
+			return false;
+		}
+
+		if($this->db->row('SELECT username FROM users WHERE username="'.$post['username'].'"')>0 and $type !== 'login'){
+    		$this->error = 'Такой логин уже есть!';
+    		return false;
+    	}
+    	
+
+		return true;
+	}
+
+	public function loginValidate($post) {
+
+	if($this->db->row('SELECT username FROM users WHERE username="'.$post['username'].'"')=0){
+    		$this->error = 'Такого логина не существует';
+    		return false;
+    	}
+    	if($this->db->row('SELECT username FROM users WHERE password="'.md5($post['password']).'"')=0){
+    		$this->error = 'Пароль не верный';
+    		return false;
+    	}
+	return true;
+    }
+
+
 	public function postsCount() {
 		return $this->db->column('SELECT COUNT(id) FROM posts');
 	}
@@ -40,6 +80,15 @@ class Main extends Model {
 	public function categorySelected($slug) {
 		
 		return $this->db->row('SELECT * FROM categories WHERE categories.`slug` ="'.$slug.'"');
+	}
+
+	public function register($post){
+		return $this->db->query('INSERT INTO users (username, email, password)
+        VALUES ("'.$post['username'].'","'.$post['email'].'", "'.md5($post['password']).'")');
+	}
+
+	public function login($post){
+		return $this->db->row('SELECT username FROM users WHERE username="'.$post['username'].'"');
 	}
 
 }

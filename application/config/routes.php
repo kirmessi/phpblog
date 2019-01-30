@@ -17,6 +17,19 @@ return [
 		'controller' => 'main',
 		'action' => 'contact',
 	],
+
+	'login' => [
+		'controller' => 'main',
+		'action' => 'login',
+	],
+	'dashboard' => [
+		'controller' => 'main',
+		'action' => 'dashboard',
+	],
+	'register' => [
+		'controller' => 'main',
+		'action' => 'register',
+	],
 //{slug:[\w-]+}
 	
 	'post/{slug:[\w-]+}' => [

@@ -28,6 +28,12 @@
                         <li class="nav-item">
                             <a class="nav-link" href="/contact">Contacts</a>
                         </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/login">Sign in</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/register">Register</a>
+                        </li>
                         
                     </ul>
                 </div>

@@ -55,4 +55,48 @@ class MainController extends Controller {
 		$this->view->rendertwig($this->route,$vars);
 	}
 
+	public function loginAction(){ 
+	if (!empty($_POST)) {
+			if (!$this->model->registerValidate($_POST,'login')) {
+				$this->view->message('Error' ,$this->model->error);
+			}
+			$_SESSION['authorize']['id'] = true;
+			$this->view->message('Success' ,'Your are login now!');
+			$this->model->login($_POST);
+		if (isset(['authorize']['id'])) {
+			$this->view->redirect('dashboard');
+			}
+		}
+		/*$vars = [
+			//'pagination' => $pagination->get(),
+			'list' => $this->model->postsList($this->route),
+		];*/
+		
+		$this->view->rendertwig($this->route,array());	
+	}
+
+	public function registerAction(){ 
+		if (!empty($_POST)) {
+			if (!$this->model->loginValidate($_POST,'register')) {
+				$this->view->message('Error' ,$this->model->error);
+			}
+			
+			$this->model->register($_POST);
+			$this->view->message('Success' ,'Your are registered now!');
+		}
+		if (isset(['authorize']['id'])) {
+			$this->view->redirect('dashboard');
+			}
+		/*$vars = [
+			//'pagination' => $pagination->get(),
+			'list' => $this->model->postsList($this->route),
+		];*/
+		
+		$this->view->rendertwig($this->route,array());	
+	}
+
+	public function dashboard(){
+		$this->view->rendertwig($this->route,array());	
+	}
+
 }
