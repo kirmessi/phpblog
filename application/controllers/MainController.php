@@ -11,6 +11,7 @@ class MainController extends Controller {
 		$vars = [
 			//'pagination' => $pagination->get(),
 			'list' => $this->model->postsList($this->route),
+			'session'   => $_SESSION,
 		];
 		
 		$this->view->rendertwig($this->route,$vars);	
@@ -57,15 +58,17 @@ class MainController extends Controller {
 
 	public function loginAction(){ 
 	if (!empty($_POST)) {
-			if (!$this->model->registerValidate($_POST,'login')) {
+			if (!$this->model->loginValidate($_POST)) {
 				$this->view->message('Error' ,$this->model->error);
 			}
-			$_SESSION['authorize']['id'] = true;
-			$this->view->message('Success' ,'Your are login now!');
 			$this->model->login($_POST);
-		if (isset(['authorize']['id'])) {
-			$this->view->redirect('dashboard');
-			}
+			$_SESSION['authorize'] = true;
+			$_SESSION['authorize'] = $_POST['username'];
+			$this->view->location('dashboard');					
+		}
+		if(isset($_SESSION['authorize']))    {
+
+   		$this->view->redirect('dashboard');
 		}
 		/*$vars = [
 			//'pagination' => $pagination->get(),
@@ -77,26 +80,31 @@ class MainController extends Controller {
 
 	public function registerAction(){ 
 		if (!empty($_POST)) {
-			if (!$this->model->loginValidate($_POST,'register')) {
+			if (!$this->model->registerValidate($_POST)) {
 				$this->view->message('Error' ,$this->model->error);
 			}
 			
 			$this->model->register($_POST);
 			$this->view->message('Success' ,'Your are registered now!');
+		
 		}
-		if (isset(['authorize']['id'])) {
-			$this->view->redirect('dashboard');
-			}
-		/*$vars = [
-			//'pagination' => $pagination->get(),
-			'list' => $this->model->postsList($this->route),
-		];*/
 		
 		$this->view->rendertwig($this->route,array());	
 	}
 
-	public function dashboard(){
-		$this->view->rendertwig($this->route,array());	
+	public function dashboardAction(){
+		
+		$vars = [
+			'list' => $this->model->dashboard($_SESSION['authorize']),
+			 'session'   => $_SESSION,
+			
+		];
+		$this->view->rendertwig($this->route,$vars);	
+		
+	}
+	public function logoutAction(){
+		unset($_SESSION['authorize']);
+		$this->view->redirect('');
 	}
 
 }

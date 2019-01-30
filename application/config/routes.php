@@ -22,6 +22,10 @@ return [
 		'controller' => 'main',
 		'action' => 'login',
 	],
+	'logout' => [
+		'controller' => 'main',
+		'action' => 'logout',
+	],
 	'dashboard' => [
 		'controller' => 'main',
 		'action' => 'dashboard',

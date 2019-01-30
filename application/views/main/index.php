@@ -28,9 +28,16 @@
                         <li class="nav-item">
                             <a class="nav-link" href="/contact">Contacts</a>
                         </li>
+                        {% if session.authorize is defined %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="/logout">Logout</a>
+                        </li>
+                        {% else %}
                         <li class="nav-item">
                             <a class="nav-link" href="/login">Sign in</a>
                         </li>
+                        {% endif %}
+                        
                         <li class="nav-item">
                             <a class="nav-link" href="/register">Register</a>
                         </li>

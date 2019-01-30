@@ -12,10 +12,12 @@ return [
 		'category',
 		'login',
 		'register',
+
 	],
 	'authorize' => [
 
 		'dashboard',
+		'logout',
 	],
 	'guest' => [
 

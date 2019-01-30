@@ -49,10 +49,10 @@ abstract class Controller {
 		if ($this->isAcl('all')) { //уровень доступа дял всех  
 			return true;
 		}
-		elseif  (isset($_SESSION['authorize']['id']) and $this->isAcl('authorize')) { ///только для авторизированных
+		elseif  (isset($_SESSION['authorize']) and $this->isAcl('authorize')) { ///только для авторизированных
 			return true; 
 		}
-		elseif  (!isset($_SESSION['authorize']['id']) and $this->isAcl('guest')) { //для гостей
+		elseif  (!isset($_SESSION['authorize']) and $this->isAcl('guest')) { //для гостей
 			return true;
 		}
 		elseif  (isset($_SESSION['admin']) and $this->isAcl('admin')) { //для админа

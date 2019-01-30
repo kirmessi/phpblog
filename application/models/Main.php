@@ -39,23 +39,22 @@ class Main extends Model {
 			$this->error = 'Пароли не совпадают';
 			return false;
 		}
-
-		if($this->db->row('SELECT username FROM users WHERE username="'.$post['username'].'"')>0 and $type !== 'login'){
-    		$this->error = 'Такой логин уже есть!';
+	
+		elseif ($this->db->column('SELECT count(*) username FROM users WHERE username="'.$post['username'].'"') > 0) {
+   			$this->error = 'Такой логин уже есть!';
     		return false;
-    	}
-    	
+		}   	
 
 		return true;
 	}
 
 	public function loginValidate($post) {
 
-	if($this->db->row('SELECT username FROM users WHERE username="'.$post['username'].'"')=0){
+	if($this->db->column('SELECT count(*) username FROM users WHERE username="'.$post['username'].'"') <= 0){
     		$this->error = 'Такого логина не существует';
     		return false;
     	}
-    	if($this->db->row('SELECT username FROM users WHERE password="'.md5($post['password']).'"')=0){
+    	if($this->db->column('SELECT count(*) password FROM users WHERE password="'.md5($post['password']).'"') <= 0){
     		$this->error = 'Пароль не верный';
     		return false;
     	}
@@ -89,6 +88,11 @@ class Main extends Model {
 
 	public function login($post){
 		return $this->db->row('SELECT username FROM users WHERE username="'.$post['username'].'"');
+		
+	}
+
+	public function dashboard($username) {
+		return $this->db->row('SELECT * FROM users WHERE username = "'.$username.'"');
 	}
 
 }

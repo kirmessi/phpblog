@@ -12,6 +12,7 @@ $(document).ready(function() {
 			success: function(result) {
 				json = jQuery.parseJSON(result);
 				if (json.url) {
+					alert(json.status + ' - ' + json.message);
 					window.location.href = '/' + json.url;
 				} else {
 					alert(json.status + ' - ' + json.message);
