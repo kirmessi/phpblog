@@ -30,6 +30,10 @@ return [
 		'controller' => 'main',
 		'action' => 'dashboard',
 	],
+	'dashboard/add' => [
+		'controller' => 'main',
+		'action' => 'dashboardadd',
+	],
 	'register' => [
 		'controller' => 'main',
 		'action' => 'register',

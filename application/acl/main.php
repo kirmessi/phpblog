@@ -17,6 +17,7 @@ return [
 	'authorize' => [
 
 		'dashboard',
+		'dashboardadd',
 		'logout',
 	],
 	'guest' => [

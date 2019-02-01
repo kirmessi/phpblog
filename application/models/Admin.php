@@ -10,6 +10,7 @@ class Admin extends Model {
 
 
 	public function loginValidate($post) {
+
 		$config = require '../application/config/admin.php';
 		if ($config['login'] != $_POST['login'] or $config['password'] != $_POST['password']) {
 			$this->error = 'Ошибка входа';
@@ -64,9 +65,19 @@ class Admin extends Model {
 	//Посты
 
 	public function postAdd($post) {
-	
-	$this->db->query('INSERT INTO posts (slug, category_id, name, description, text)
-        VALUES ("'.$post['slug'].'","'.$post['category_id'].'", "'.$post['name'].'", "'.$post['description'].'", "'.$post['text'].'")');
+	if (!empty($_SESSION['authorize'])) {
+		$post['username'] = $_SESSION['authorize'];
+	} elseif(isset($_SESSION['admin'])) {
+		$post['username'] = 'admin';
+	}
+	if (isset($_POST['visibility'])) {
+		$post['visibility'] = 1;
+	}
+	else {
+		$post['visibility'] = 0;
+	}
+	$this->db->query('INSERT INTO posts (username, slug, category_id, name, description, text, visibility)
+        VALUES ("'.$post['username'].'", "'.$post['slug'].'","'.$post['category_id'].'", "'.$post['name'].'", "'.$post['description'].'", "'.$post['text'].'", "'.$post['visibility'].'")');
 
 			return $this->db->lastInsertId();
 	}
@@ -74,6 +85,12 @@ class Admin extends Model {
 
 
 	public function postEdit($post,$id) {
+		if (isset($_POST['visibility'])) {
+		$post['visibility'] = 1;
+	}
+	else {
+		$post['visibility'] = 0;
+	}
 	$params = [
 			'id' => $id,
 			'slug'=> $post['slug'],
@@ -81,9 +98,10 @@ class Admin extends Model {
 			'name' => $post['name'],
 			'description' => $post['description'],
 			'text' => $post['text'],
+			'visibility' => $post['visibility'],
 		];
 		
-		return $this->db->query('UPDATE posts SET id = :id, slug = :slug, category_id = :category_id, name = :name,  description = :description, text = :text WHERE id = :id', $params);
+		return $this->db->query('UPDATE posts SET id = :id, slug = :slug, category_id = :category_id, name = :name,  description = :description, text = :text, visibility = :visibility WHERE id = :id', $params);
 			
 	}
 

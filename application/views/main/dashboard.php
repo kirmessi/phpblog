@@ -9,5 +9,7 @@
                   {% endblock %} 
                   {% block subslidertitle %}Join to us!{% endblock %}
             {% block content %}
-         
+         <div class="row">
+                 <ul><li><a href="/dashboard/add/">Добавить пост</a></li></ul> 
+                </div>
             {% endblock %}

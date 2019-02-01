@@ -68,6 +68,11 @@ class Main extends Model {
 
 	public function postsList($route) {
 		
+		return $this->db->row('SELECT posts.*, categories.`name` as `cat_name`, categories.`slug` as `cat_slug`FROM posts INNER JOIN categories ON (posts.`category_id`= categories.`category_id`)WHERE posts.`visibility`= 1 ORDER BY id DESC ');
+	}
+
+	public function postsListforAdmin($route) {
+		
 		return $this->db->row('SELECT posts.*, categories.`name` as `cat_name`, categories.`slug` as `cat_slug`FROM posts INNER JOIN categories ON (posts.`category_id`= categories.`category_id`) ORDER BY id DESC ');
 	}
 

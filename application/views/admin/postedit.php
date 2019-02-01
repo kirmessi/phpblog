@@ -38,9 +38,13 @@
                             <?php endforeach ?>
                     
                             </select>
-
                             
-
+                            </div>
+                            <div class="form-group">
+                                <input type="checkbox" id="visibility" name="visibility" <?php
+                                   if ($data['visibility'] == 1) {
+                                      echo 'checked';}?>>
+                                <label for="visibility">Опубликовать</label>
                             </div>
                             <button type="submit" class="btn btn-primary btn-block">Сохранить</button>
                         </form>

@@ -56,6 +56,7 @@ class AdminController extends Controller {
 			//$this->model->categorypostsAdd();
 			$this->model->postUploadImage($_FILES['img']['tmp_name'], $id);
 			$this->view->message('success', 'Пост добавлен');
+			
 		}
 
 		$vars = [
@@ -111,7 +112,7 @@ class AdminController extends Controller {
 		/*$pagination = new Pagination($this->route, $mainModel->postsCount());*/
 		$vars = [
 			//'pagination' => $pagination->get(),
-			'list' => $mainModel->postsList($this->route),
+			'list' => $mainModel->postsListforAdmin($this->route),
 		];
 		$this->view->render('Посты', $vars);
 	}

@@ -64,16 +64,13 @@ class MainController extends Controller {
 			$this->model->login($_POST);
 			$_SESSION['authorize'] = true;
 			$_SESSION['authorize'] = $_POST['username'];
-			$this->view->location('dashboard');					
+			$this->view->location('dashboard');	
+
 		}
 		if(isset($_SESSION['authorize']))    {
 
    		$this->view->redirect('dashboard');
 		}
-		/*$vars = [
-			//'pagination' => $pagination->get(),
-			'list' => $this->model->postsList($this->route),
-		];*/
 		
 		$this->view->rendertwig($this->route,array());	
 	}
@@ -86,7 +83,7 @@ class MainController extends Controller {
 			
 			$this->model->register($_POST);
 			$this->view->message('Success' ,'Your are registered now!');
-		
+
 		}
 		
 		$this->view->rendertwig($this->route,array());	
@@ -100,7 +97,29 @@ class MainController extends Controller {
 			
 		];
 		$this->view->rendertwig($this->route,$vars);	
+		//$this->view->render('TEST',$vars);
 		
+	}
+
+	public function dashboardaddAction(){
+	$adminModel = new Admin;
+		if (!empty($_POST)) {
+			if (!$adminModel->postValidate($_POST, 'add')) {
+				$this->view->message('Error', $adminModel->error);
+			}
+			$id = $adminModel->postAdd($_POST);
+			//$this->model->categorypostsAdd();
+			$adminModel->postUploadImage($_FILES['img']['tmp_name'], $id);
+			$this->view->message('success', 'Пост добавлен');
+		}
+		
+		$vars = [
+			'list' => $this->model->dashboard($_SESSION['authorize']),
+			 'session'   => $_SESSION,
+			'categories'=> $adminModel->categoriesList($this->route),
+		];
+		$this->view->rendertwig($this->route,$vars);	
+		//$this->view->render('TEST',$vars);
 	}
 	public function logoutAction(){
 		unset($_SESSION['authorize']);
