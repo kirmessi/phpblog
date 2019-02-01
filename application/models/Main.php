@@ -49,6 +49,10 @@ class Main extends Model {
 	}
 
 	public function loginValidate($post) {
+		if(isset($_SESSION['admin']))    {
+		$this->error = 'Вы уже зарегистрировались как админ!';
+		return false;
+		}
 
 	if($this->db->column('SELECT count(*) username FROM users WHERE username="'.$post['username'].'"') <= 0){
     		$this->error = 'Такого логина не существует';
@@ -69,6 +73,9 @@ class Main extends Model {
 	public function postsList($route) {
 		
 		return $this->db->row('SELECT posts.*, categories.`name` as `cat_name`, categories.`slug` as `cat_slug`FROM posts INNER JOIN categories ON (posts.`category_id`= categories.`category_id`)WHERE posts.`visibility`= 1 ORDER BY id DESC ');
+	}
+	public function postsListcurrnetUser($user_id) {
+		return $this->db->row('SELECT * FROM posts WHERE user_id = "'.$user_id.'"');
 	}
 
 	public function postsListforAdmin($route) {
@@ -95,9 +102,13 @@ class Main extends Model {
 		return $this->db->row('SELECT username FROM users WHERE username="'.$post['username'].'"');
 		
 	}
+	public function loginId($post){
+		return $this->db->row('SELECT id FROM users WHERE username="'.$post['username'].'"');
+		
+	}
 
-	public function dashboard($username) {
-		return $this->db->row('SELECT * FROM users WHERE username = "'.$username.'"');
+	public function dashboard($id) {
+		return $this->db->row('SELECT * FROM users WHERE id = "'.$id.'"');
 	}
 
 }

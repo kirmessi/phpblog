@@ -57,13 +57,16 @@ class MainController extends Controller {
 	}
 
 	public function loginAction(){ 
+		
 	if (!empty($_POST)) {
-			if (!$this->model->loginValidate($_POST)) {
-				$this->view->message('Error' ,$this->model->error);
+
+		if (!$this->model->loginValidate($_POST)) {
+			$this->view->message('Error' ,$this->model->error);
 			}
 			$this->model->login($_POST);
+			$id = $this->model->loginId($_POST)[0];
 			$_SESSION['authorize'] = true;
-			$_SESSION['authorize'] = $_POST['username'];
+			$_SESSION['authorize'] = $id;
 			$this->view->location('dashboard');	
 
 		}
@@ -71,19 +74,21 @@ class MainController extends Controller {
 
    		$this->view->redirect('dashboard');
 		}
-		
 		$this->view->rendertwig($this->route,array());	
 	}
 
 	public function registerAction(){ 
+
 		if (!empty($_POST)) {
 			if (!$this->model->registerValidate($_POST)) {
 				$this->view->message('Error' ,$this->model->error);
 			}
-			
 			$this->model->register($_POST);
 			$this->view->message('Success' ,'Your are registered now!');
+		}
 
+		if(isset($_SESSION['authorize']))    {
+   		$this->view->redirect('dashboard');
 		}
 		
 		$this->view->rendertwig($this->route,array());	
@@ -92,30 +97,32 @@ class MainController extends Controller {
 	public function dashboardAction(){
 		
 		$vars = [
-			'list' => $this->model->dashboard($_SESSION['authorize']),
-			 'session'   => $_SESSION,
+			'list' => $this->model->dashboard($_SESSION['authorize']['id']),
+			'session'   => $_SESSION,
+			'posts' => $this->model->postsListcurrnetUser($_SESSION['authorize']['id']),
 			
 		];
+		
 		$this->view->rendertwig($this->route,$vars);	
-		//$this->view->render('TEST',$vars);
+		
 		
 	}
 
 	public function dashboardaddAction(){
-	$adminModel = new Admin;
+		$adminModel = new Admin;
 		if (!empty($_POST)) {
 			if (!$adminModel->postValidate($_POST, 'add')) {
 				$this->view->message('Error', $adminModel->error);
 			}
 			$id = $adminModel->postAdd($_POST);
 			//$this->model->categorypostsAdd();
-			$adminModel->postUploadImage($_FILES['img']['tmp_name'], $id);
+			//$adminModel->postUploadImage($_FILES['img']['tmp_name'], $id);
 			$this->view->message('success', 'Пост добавлен');
 		}
 		
 		$vars = [
-			'list' => $this->model->dashboard($_SESSION['authorize']),
-			 'session'   => $_SESSION,
+			'list' => $this->model->dashboard($_SESSION['authorize']['id']),
+			'session'   => $_SESSION,
 			'categories'=> $adminModel->categoriesList($this->route),
 		];
 		$this->view->rendertwig($this->route,$vars);	

@@ -12,7 +12,7 @@
         <h5 class="post-subtitle">{{val.description}}</h5>
         </a>
         <div class="row">
-        <div class="col-6">Создано: {{val.date}}</div>
+        <div class="col-6">Created at: {{val.date}}</div>
       
         </div>                    
     </div>

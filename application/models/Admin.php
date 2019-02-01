@@ -27,6 +27,7 @@ class Admin extends Model {
 		$nameLen = iconv_strlen($_POST['name']);
 		$descLen = iconv_strlen($_POST['description']);
 		$textLen = iconv_strlen($_POST['text']);
+		$slugLen = iconv_strlen($_POST['slug']);
 
 		if ($nameLen < 3 or $nameLen > 150) {
 			$this->error = 'Имя должно содержать от 3 до 20 символов';
@@ -37,7 +38,13 @@ class Admin extends Model {
 		} elseif ($textLen < 10 or $textLen  > 5000) {
 			$this->error = 'Описание должно содержать от 10 до 5000 символов';
 			return false;
-		}
+		} elseif ($slugLen < 4 or $slugLen  > 50 and $type == 'add') {
+			$this->error = 'Адрес должен содержать от 4 до 50 символов';
+			return false;
+		} elseif($this->db->column('SELECT count(*) slug FROM posts WHERE slug="'.$post['slug'].'"') > 0 and $type == 'add') {
+   			$this->error = 'Такой адрес уже есть!';
+    		return false;
+		}   	
 
 		if (empty($_FILES['img']['tmp_name']) and $type == 'add') {
 			$this->error = 'Изображение не загружено';
@@ -66,9 +73,9 @@ class Admin extends Model {
 
 	public function postAdd($post) {
 	if (!empty($_SESSION['authorize'])) {
-		$post['username'] = $_SESSION['authorize'];
+		$post['user_id'] = $_SESSION['authorize']['id'];
 	} elseif(isset($_SESSION['admin'])) {
-		$post['username'] = 'admin';
+		$post['user_id'] = 'admin';
 	}
 	if (isset($_POST['visibility'])) {
 		$post['visibility'] = 1;
@@ -76,8 +83,8 @@ class Admin extends Model {
 	else {
 		$post['visibility'] = 0;
 	}
-	$this->db->query('INSERT INTO posts (username, slug, category_id, name, description, text, visibility)
-        VALUES ("'.$post['username'].'", "'.$post['slug'].'","'.$post['category_id'].'", "'.$post['name'].'", "'.$post['description'].'", "'.$post['text'].'", "'.$post['visibility'].'")');
+	$this->db->query('INSERT INTO posts (user_id, slug, category_id, name, description, text, visibility)
+        VALUES ("'.$post['user_id'].'", "'.$post['slug'].'","'.$post['category_id'].'", "'.$post['name'].'", "'.$post['description'].'", "'.$post['text'].'", "'.$post['visibility'].'")');
 
 			return $this->db->lastInsertId();
 	}
