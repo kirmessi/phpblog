@@ -100,9 +100,10 @@ class MainController extends Controller {
 			'list' => $this->model->dashboard($_SESSION['authorize']['id']),
 			'session'   => $_SESSION,
 			'posts' => $this->model->postsListcurrnetUser($_SESSION['authorize']['id']),
+			'data' =>$this->model->postsListforUser($this->route,$_SESSION['authorize']['id'])[0],
 			
 		];
-		
+		//$this->view->render('sdfsdf',$vars);
 		$this->view->rendertwig($this->route,$vars);	
 		
 		
@@ -115,18 +116,63 @@ class MainController extends Controller {
 				$this->view->message('Error', $adminModel->error);
 			}
 			$id = $adminModel->postAdd($_POST);
-			//$this->model->categorypostsAdd();
-			//$adminModel->postUploadImage($_FILES['img']['tmp_name'], $id);
-			$this->view->message('success', 'Пост добавлен');
+	
+			$adminModel->postUploadImage($_FILES['img']['tmp_name'], $id);
+			$this->view->message('success', 'Пост добавлен на модерацию');
 		}
 		
 		$vars = [
 			'list' => $this->model->dashboard($_SESSION['authorize']['id']),
 			'session'   => $_SESSION,
 			'categories'=> $adminModel->categoriesList($this->route),
+			
 		];
 		$this->view->rendertwig($this->route,$vars);	
 		//$this->view->render('TEST',$vars);
+	}
+	public function dashboardeditAction(){ 
+		
+		$adminModel = new Admin;
+		if (!$this->model->isPostExistsMain($this->route['id'])) {
+			$this->view->errorCode(404);
+		}
+		elseif($this->model->isPostExistsMain($this->route['id']) != $this->model->isPostBelongToUser($_SESSION['authorize']['id'],$this->route['id'])){
+			$this->view->errorCode(404);
+		}
+		if (!empty($_POST)) {
+			if (!$adminModel->postValidate($_POST, 'edit')) {
+				$this->view->message('error', $this->adminModel->error);
+			}
+			$data = $adminModel->postEdit($_POST, $this->route['id']);
+			//debug($_POST);
+			if ($_FILES['img']['tmp_name']) {
+				$this->adminModel->postUploadImage($_FILES['img']['tmp_name'], $this->route['id']);
+			}
+			if ($data) {
+				$this->view->message('success','Cохранено');
+			}
+			
+		}
+
+		$vars = [
+			'data' => $adminModel->postDataAdmin($this->route['id'])[0],
+			'categories' => $adminModel->categoriesList($this->route),
+			
+		];
+		//$this->view->render('asdasd', $vars);
+		$this->view->rendertwig($this->route, $vars);
+	}
+	public function dashboarddeleteAction(){ 
+		if (!$this->model->isPostExistsMain($this->route['id'])) {
+			$this->view->errorCode(404);
+		}
+		if($this->model->isPostExistsMain($this->route['id']) != $this->model->isPostBelongToUser($_SESSION['authorize']['id'],$this->route['id'])){
+			$this->view->errorCode(404);
+		}
+		$this->model->postDeleteBelongToUser($this->route['id']);
+		$this->view->redirect('dashboard');
+		
+
 	}
 	public function logoutAction(){
 		unset($_SESSION['authorize']);

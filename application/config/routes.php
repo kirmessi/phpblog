@@ -34,10 +34,19 @@ return [
 		'controller' => 'main',
 		'action' => 'dashboardadd',
 	],
+	'dashboard/edit/{id:\d+}' => [
+		'controller' => 'main',
+		'action' => 'dashboardedit',
+	],
+	'dashboard/delete/{id:\d+}' => [
+		'controller' => 'main',
+		'action' => 'dashboarddelete',
+	],
 	'register' => [
 		'controller' => 'main',
 		'action' => 'register',
 	],
+	
 //{slug:[\w-]+}
 	
 	'post/{slug:[\w-]+}' => [

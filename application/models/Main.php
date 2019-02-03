@@ -65,11 +65,6 @@ class Main extends Model {
 	return true;
     }
 
-
-	public function postsCount() {
-		return $this->db->column('SELECT COUNT(id) FROM posts');
-	}
-
 	public function postsList($route) {
 		
 		return $this->db->row('SELECT posts.*, categories.`name` as `cat_name`, categories.`slug` as `cat_slug`FROM posts INNER JOIN categories ON (posts.`category_id`= categories.`category_id`)WHERE posts.`visibility`= 1 ORDER BY id DESC ');
@@ -81,6 +76,10 @@ class Main extends Model {
 	public function postsListforAdmin($route) {
 		
 		return $this->db->row('SELECT posts.*, categories.`name` as `cat_name`, categories.`slug` as `cat_slug`FROM posts INNER JOIN categories ON (posts.`category_id`= categories.`category_id`) ORDER BY id DESC ');
+	}
+	public function postsListforUser($route, $user_id) {
+		
+		return $this->db->row('SELECT posts.*, categories.`name` as `cat_name`, categories.`slug` as `cat_slug`FROM posts INNER JOIN categories ON (posts.`category_id`= categories.`category_id`) WHERE posts.`user_id` = "'.$user_id.'" ORDER BY id DESC ');
 	}
 
 	public function categorypostsList($slug) {
@@ -110,5 +109,22 @@ class Main extends Model {
 	public function dashboard($id) {
 		return $this->db->row('SELECT * FROM users WHERE id = "'.$id.'"');
 	}
+	public function isPostExistsMain($id){
+
+		return $this->db->column('SELECT id FROM posts WHERE id ="'.$id.'"');
+
+	}
+	public function isPostBelongToUser($user_id, $id){
+
+		return $this->db->column('SELECT id FROM posts WHERE user_id ="'.$user_id.'" and id ="'.$id.'"');
+
+	}
+	public function postDeleteBelongToUser($id){ 
+
+	$this->db->column('DELETE FROM posts WHERE id ="'.$id.'"');
+		 unlink('materials/'.$id.'.jpg');
+
+	}
+	
 
 }

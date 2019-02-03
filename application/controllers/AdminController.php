@@ -53,7 +53,7 @@ class AdminController extends Controller {
 			
 			
 			$id = $this->model->postAdd($_POST);
-			//$this->model->categorypostsAdd();
+			
 			$this->model->postUploadImage($_FILES['img']['tmp_name'], $id);
 			$this->view->message('success', 'Пост добавлен');
 			

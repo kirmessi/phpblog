@@ -75,7 +75,7 @@ class Admin extends Model {
 	if (!empty($_SESSION['authorize'])) {
 		$post['user_id'] = $_SESSION['authorize']['id'];
 	} elseif(isset($_SESSION['admin'])) {
-		$post['user_id'] = 'admin';
+		$post['user_id'] = 1;
 	}
 	if (isset($_POST['visibility'])) {
 		$post['visibility'] = 1;
@@ -126,7 +126,6 @@ class Admin extends Model {
 		return $this->db->column('SELECT id FROM posts WHERE id ="'.$id.'"');
 
 	}
-
 	
 	public function postDelete($id){
 

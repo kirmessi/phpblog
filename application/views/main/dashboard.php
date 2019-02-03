@@ -32,8 +32,8 @@
                                         {% else %}
                                             Moderation
                                         {% endif %}</td>
-                                        <td><a href="" class="btn btn-primary">Edit</a></td>
-                                        <td><a href="" class="btn btn-danger">Delete</a></td>
+                                        <td><a href="/dashboard/edit/{{post.id}}" class="btn btn-primary">Edit</a></td>
+                                        <td><a href="/dashboard/delete/{{post.id}}" class="btn btn-danger">Delete</a></td>
                                     </tr>
                                 {% endfor %}
                             </table>

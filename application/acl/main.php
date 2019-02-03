@@ -18,6 +18,8 @@ return [
 
 		'dashboard',
 		'dashboardadd',
+		'dashboardedit',
+		'dashboarddelete',
 		'logout',
 	],
 	'guest' => [
