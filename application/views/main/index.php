@@ -1,3 +1,4 @@
+<?php debug($list);?>
 <!DOCTYPE html>
 <html lang="en">
     <head>

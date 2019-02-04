@@ -35,7 +35,7 @@ class View {
 		}
 	}
 	public function rendertwig($route,$vars) { //HTML render code
-		require PATH.'application/lib/Dev.php';
+		require PATH.'application/lib/dev.php';
 
 		$temple = $twig->loadTemplate($route['action'].'.php');
 		echo $temple->render($vars);

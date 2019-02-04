@@ -61,7 +61,7 @@ class AdminController extends Controller {
 
 		$vars = [
 			
-			'list' => $this->model->categoriesList($this->route),
+			'list' => $this->model->categoriesList(),
 		];
 		$this->view->render('Add post', $vars);
 		
@@ -90,7 +90,7 @@ class AdminController extends Controller {
 
 		$vars = [
 			'data' => $this->model->postDataAdmin($this->route['id'])[0],
-			'list' => $this->model->categoriesList($this->route),
+			'list' => $this->model->categoriesList(),
 			//'categories'=>$this->model->categoryPosts(), 
 		];
 		$this->view->render('Редактировать пост', $vars);
@@ -123,7 +123,7 @@ class AdminController extends Controller {
 		/*$pagination = new Pagination($this->route, $mainModel->postsCount());*/
 		$vars = [
 			//'pagination' => $pagination->get(),
-			'list' => $this->model->categoriesList($this->route),
+			'list' => $this->model->categoriesList(),
 		];
 		$this->view->render('Категории', $vars);
 	}

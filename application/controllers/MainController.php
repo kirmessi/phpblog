@@ -115,7 +115,7 @@ class MainController extends Controller {
 			'list' => $this->model->dashboard($_SESSION['authorize']['id']),
 			'session'   => $_SESSION,
 			'posts' => $this->model->postsListcurrnetUser($_SESSION['authorize']['id']),
-			'data' =>$this->model->postsListforUser($this->route,$_SESSION['authorize']['id'])[0],
+			'data' =>$this->model->postsListforUser($this->route,$_SESSION['authorize']['id']),
 			
 		];
 		$this->view->rendertwig($this->route,$vars);	
@@ -137,7 +137,7 @@ class MainController extends Controller {
 		$vars = [
 			'list' => $this->model->dashboard($_SESSION['authorize']['id']),
 			'session'   => $_SESSION,
-			'categories'=> $adminModel->categoriesList($this->route),
+			'categories'=> $adminModel->categoriesList(),
 			
 		];
 		$this->view->rendertwig($this->route,$vars);	

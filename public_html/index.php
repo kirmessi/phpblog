@@ -1,6 +1,6 @@
 <?php 
 define('PATH',realpath(dirname(__FILE__).'/../').'/');
-require PATH.'application/lib/Dev.php';
+require PATH.'application/lib/dev.php';
 function debug($str) { //дебагер
 
 	echo '<pre>';

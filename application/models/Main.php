@@ -78,12 +78,15 @@ class Main extends Model {
 		return true;
     }
 
-	public function postsList($route) {
+	public function postsList() {
 	
 		return $this->db->row('SELECT posts.*,users.`username` as `username`, categories.`name` as `cat_name`, categories.`slug` as `cat_slug`FROM posts INNER JOIN categories ON (posts.`category_id`= categories.`category_id`) INNER JOIN users ON (posts.`user_id`= users.`id`) WHERE posts.`visibility`= 1 ORDER BY id DESC ');
 	}
 	public function postsListcurrnetUser($user_id) {
-		return $this->db->row('SELECT * FROM posts WHERE user_id = "'.$user_id.'"');
+		$params = [
+			'user_id' => $user_id,
+		];
+		return $this->db->row('SELECT * FROM posts WHERE user_id = :user_id', $params);
 	}
 
 	public function postsListforAdmin($route) {
@@ -91,71 +94,105 @@ class Main extends Model {
 		return $this->db->row('SELECT posts.*, categories.`name` as `cat_name`, categories.`slug` as `cat_slug`FROM posts INNER JOIN categories ON (posts.`category_id`= categories.`category_id`) ORDER BY id DESC ');
 	}
 	public function postsListforUser($route, $user_id) {
-		
-		return $this->db->row('SELECT posts.*, categories.`name` as `cat_name`, categories.`slug` as `cat_slug`FROM posts INNER JOIN categories ON (posts.`category_id`= categories.`category_id`) WHERE posts.`user_id` = "'.$user_id.'" ORDER BY id DESC ');
+		$params = [
+			'user_id' => $user_id,
+		];
+		return $this->db->row('SELECT posts.*, categories.`name` as `cat_name`, categories.`slug` as `cat_slug`FROM posts INNER JOIN categories ON (posts.`category_id`= categories.`category_id`) WHERE posts.`user_id` = :user_id ORDER BY id DESC', $params);
 	}
 
 	public function categorypostsList($slug) {
-		
-		return $this->db->row('SELECT posts.*, categories.`name` as `cat_name`, categories.`description` as `cat_desc` FROM posts INNER JOIN categories ON (posts.`category_id`= categories.`category_id`) WHERE categories.`slug` ="'.$slug.'"');
+		$params = [
+			'slug' => $slug,
+		];
+		return $this->db->row('SELECT posts.*, categories.`name` as `cat_name`, categories.`description` as `cat_desc` FROM posts INNER JOIN categories ON (posts.`category_id`= categories.`category_id`) WHERE categories.`slug` = :slug', $params);
 	}
 
-	public function authorpostsList($route) {
-		return $this->db->row('SELECT posts.*,users.`username` as `username`, categories.`name` as `cat_name`, categories.`slug` as `cat_slug`FROM posts INNER JOIN categories ON (posts.`category_id`= categories.`category_id`) INNER JOIN users ON (posts.`user_id`= users.`id`) WHERE posts.`user_id`= "'.$route.'"  ORDER BY id DESC ');
-		
-		return $this->db->row('SELECT posts.*, categories.`name` as `cat_name`, categories.`description` as `cat_desc` FROM posts INNER JOIN categories ON (posts.`category_id`= categories.`category_id`) WHERE categories.`slug` ="'.$slug.'"');
+	public function authorpostsList($user_id) {
+		$params = [
+			'user_id' => $user_id,
+		];
+		return $this->db->row('SELECT posts.*,users.`username` as `username`, categories.`name` as `cat_name`, categories.`slug` as `cat_slug`FROM posts INNER JOIN categories ON (posts.`category_id`= categories.`category_id`) INNER JOIN users ON (posts.`user_id`= users.`id`) WHERE posts.`user_id`= :user_id ORDER BY id DESC ' , $params);
 	}
 
 	public function categorySelected($slug) {
-		
-		return $this->db->row('SELECT * FROM categories WHERE categories.`slug` ="'.$slug.'"');
+		$params = [
+			'slug' => $slug,
+		];
+		return $this->db->row('SELECT * FROM categories WHERE categories.`slug` = :slug', $params);
 	}
-	public function AuthorSelected($route) {
-		
-		return $this->db->row('SELECT username FROM users WHERE id ="'.$route.'"');
+	public function AuthorSelected($id) {
+		$params = [
+			'id' => $id,
+		];
+		return $this->db->row('SELECT username FROM users WHERE id = :id', $params);
 	}
 
 	public function register($post){
+		$params = [
+			'username' => $post['username'],
+			'email'=> $post['email'],
+			'password' => md5($post['password']),
+		];
 		return $this->db->query('INSERT INTO users (username, email, password)
-        VALUES ("'.$post['username'].'","'.$post['email'].'", "'.md5($post['password']).'")');
+        VALUES (:username , :email, :password)', $params);
 	}
 
-	public function login($post){
-		return $this->db->row('SELECT username FROM users WHERE username="'.$post['username'].'"');
+	public function login($username){
+		$params = [
+			'username' => $post['username'],
+		];
+		return $this->db->row('SELECT username FROM users WHERE username = :username', $params);
 		
 	}
-	public function loginId($post){
-		return $this->db->row('SELECT id FROM users WHERE username="'.$post['username'].'"');
+	public function loginId($username){
+		$params = [
+			'username' => $post['username'],
+		];
+		return $this->db->row('SELECT id FROM users WHERE username = :username', $params);
 		
 	}
 
 	public function dashboard($id) {
-		return $this->db->row('SELECT * FROM users WHERE id = "'.$id.'"');
+		$params = [
+			'id' => $id,
+		];
+		return $this->db->row('SELECT * FROM users WHERE id = :id', $params);
 	}
 	public function isPostExistsMain($id){
-
-		return $this->db->column('SELECT id FROM posts WHERE id ="'.$id.'"');
+		$params = [
+			'id' => $id,
+		];
+		return $this->db->column('SELECT id FROM posts WHERE id = :id', $params);
 
 	}
 
 	public function isPostExistsToAuthor($user_id){
-
-		return $this->db->row('SELECT * FROM posts WHERE user_id ="'.$user_id.'"');
+		$params = [
+			'user_id' => $user_id,
+		];
+		return $this->db->row('SELECT * FROM posts WHERE user_id = :user_id', $params);
 
 	}
-	public function isAuthorExists($user_id){
-
-		return $this->db->column('SELECT id FROM users WHERE id ="'.$user_id.'"');
+	public function isAuthorExists($id){
+		$params = [
+			'id' => $id,
+		];
+		return $this->db->column('SELECT id FROM users WHERE id = :id', $params);
 
 	}
 	public function isPostBelongToUser($user_id, $id){
-
-		return $this->db->column('SELECT id FROM posts WHERE user_id ="'.$user_id.'" and id ="'.$id.'"');
+		$params = [
+			'user_id' => $user_id,
+			'id' => $id,
+		];
+		return $this->db->column('SELECT id FROM posts WHERE user_id = :user_id and id = :id', $params);
 
 	}
 	public function postDeleteBelongToUser($id){ 
-
-	$this->db->column('DELETE FROM posts WHERE id ="'.$id.'"');
+		$params = [
+			'id' => $id,
+		];
+		$this->db->column('DELETE FROM posts WHERE id = :id', $params);
 		 unlink('materials/'.$id.'.jpg');
 	}
 	public function UserSettings($post, $id){
