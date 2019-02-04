@@ -7,13 +7,12 @@ use application\lib\Db;
 use application\models\Admin;
 
 class MainController extends Controller {
+
 	public function indexAction(){ //главная
-		$vars = [
-			//'pagination' => $pagination->get(),
+			$vars = [
 			'list' => $this->model->postsList($this->route),
 			'session'   => $_SESSION,
 		];
-		
 		$this->view->rendertwig($this->route,$vars);	
 	}
 
@@ -26,6 +25,7 @@ class MainController extends Controller {
 			mail('test@utoo.email', 'Сообщение из блога', $_POST['name'].'|'.$_POST['email'].'|'.$_POST['text']);
 			$this->view->message('Success' ,'Ваше сообщение успешно отправлено');
 		}
+
 		$this->view->rendertwig($this->route,array());	
 	}
 
@@ -56,6 +56,20 @@ class MainController extends Controller {
 		$this->view->rendertwig($this->route,$vars);
 	}
 
+	public function authorAction() {
+	
+		if (!$this->model->isAuthorExists($this->route['id'])) {
+			$this->view->errorCode(404);
+		}
+
+		$vars = [
+			'list' => $this->model->authorpostsList($this->route['id']),
+			'author'=>$this->model->AuthorSelected($this->route['id'])[0], 
+		];
+		$this->view->rendertwig($this->route,$vars);
+		//$this->view->render('sadsada',$vars);
+	}
+
 	public function loginAction(){ 
 		
 	if (!empty($_POST)) {
@@ -74,6 +88,7 @@ class MainController extends Controller {
 
    		$this->view->redirect('dashboard');
 		}
+
 		$this->view->rendertwig($this->route,array());	
 	}
 
@@ -90,7 +105,7 @@ class MainController extends Controller {
 		if(isset($_SESSION['authorize']))    {
    		$this->view->redirect('dashboard');
 		}
-		
+
 		$this->view->rendertwig($this->route,array());	
 	}
 
@@ -103,13 +118,12 @@ class MainController extends Controller {
 			'data' =>$this->model->postsListforUser($this->route,$_SESSION['authorize']['id'])[0],
 			
 		];
-		//$this->view->render('sdfsdf',$vars);
 		$this->view->rendertwig($this->route,$vars);	
-		
-		
+
 	}
 
 	public function dashboardaddAction(){
+
 		$adminModel = new Admin;
 		if (!empty($_POST)) {
 			if (!$adminModel->postValidate($_POST, 'add')) {
@@ -120,7 +134,6 @@ class MainController extends Controller {
 			$adminModel->postUploadImage($_FILES['img']['tmp_name'], $id);
 			$this->view->message('success', 'Пост добавлен на модерацию');
 		}
-		
 		$vars = [
 			'list' => $this->model->dashboard($_SESSION['authorize']['id']),
 			'session'   => $_SESSION,
@@ -128,7 +141,6 @@ class MainController extends Controller {
 			
 		];
 		$this->view->rendertwig($this->route,$vars);	
-		//$this->view->render('TEST',$vars);
 	}
 	public function dashboardeditAction(){ 
 		
@@ -157,11 +169,11 @@ class MainController extends Controller {
 		$vars = [
 			'data' => $adminModel->postDataAdmin($this->route['id'])[0],
 			'categories' => $adminModel->categoriesList($this->route),
-			
+			'session'   => $_SESSION,
 		];
-		//$this->view->render('asdasd', $vars);
 		$this->view->rendertwig($this->route, $vars);
 	}
+
 	public function dashboarddeleteAction(){ 
 		if (!$this->model->isPostExistsMain($this->route['id'])) {
 			$this->view->errorCode(404);
@@ -171,9 +183,26 @@ class MainController extends Controller {
 		}
 		$this->model->postDeleteBelongToUser($this->route['id']);
 		$this->view->redirect('dashboard');
-		
-
 	}
+
+	public function dashboardsettingsAction(){ 
+
+		if (!empty($_POST)) {
+			if (!$this->model->settingsValidate($_POST)) {
+				$this->view->message('Error' ,$this->model->error);
+			}
+			$this->model->UserSettings($_POST, $_SESSION['authorize']['id']);
+			$this->view->message('Success' ,'Updated');
+		}
+
+		$vars = [
+			'data' => $this->model->dashboard($_SESSION['authorize']['id'])[0],
+			'session'   => $_SESSION,
+		];
+		$this->view->rendertwig($this->route, $vars);
+		//$this->view->render('adas',$vars);
+	}
+
 	public function logoutAction(){
 		unset($_SESSION['authorize']);
 		$this->view->redirect('');

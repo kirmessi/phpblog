@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -27,7 +26,7 @@
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="/contact">Contacts</a>
-                        </li>
+                        
                         {% if session.authorize is defined %}
                         <li class="nav-item dropdown">
                         <a href="#" data-toggle="dropdown" class="nav-link dropdown-toggle">Profile <b class="caret"></b></a>
@@ -80,9 +79,11 @@
                             <h5 class="post-subtitle">{{val.description}}</h5>
                         </a>
                        <div class="row">
-                        <div class="col-6">Created at: {{val.date}}</div>
+                        <div class="col-6">Created at:                        {{val.date}}</div>
                         <div class="col-6"><a href="/category/{{val.cat_slug}}">{{val.cat_name}}</a></div>
                         </div>
+                      <div>Author: <a href="/author/{{val.user_id}}">{{val.username}}</a>
+                        </div>  
                     </div>
                     <hr>
                   {% endfor %}
@@ -91,7 +92,7 @@
     </div>
 </div>
         <hr>
-     
+     {{ pagination }}
     </body>
 </html>
 

@@ -42,6 +42,10 @@ return [
 		'controller' => 'main',
 		'action' => 'dashboarddelete',
 	],
+	'dashboard/settings' => [
+		'controller' => 'main',
+		'action' => 'dashboardsettings',
+	],
 	'register' => [
 		'controller' => 'main',
 		'action' => 'register',
@@ -56,6 +60,10 @@ return [
 	'category/{slug:[\w-]+}' => [
 		'controller' => 'main',
 		'action' => 'category',
+	],
+	'author/{id:\d+}' => [
+		'controller' => 'main',
+		'action' => 'author',
 	],
 //AdminContoller
 	'admin' => [

@@ -12,6 +12,7 @@ return [
 		'category',
 		'login',
 		'register',
+		'author',
 
 	],
 	'authorize' => [
@@ -20,6 +21,7 @@ return [
 		'dashboardadd',
 		'dashboardedit',
 		'dashboarddelete',
+		'dashboardsettings',
 		'logout',
 	],
 	'guest' => [

@@ -1,6 +1,6 @@
 
 {% extends "index.php" %}
-{% block title %}Dashboard{% endblock %}
+{% block title %}Dashboard Edit Post{% endblock %}
 {% block sliderimage %}<header class="masthead" style="background-image: url('/images/contact-bg.jpg')">{% endblock %}
                   {% block slidertitle %}
                   	

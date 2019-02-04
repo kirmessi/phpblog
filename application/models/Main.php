@@ -65,9 +65,22 @@ class Main extends Model {
 	return true;
     }
 
-	public function postsList($route) {
+    public function settingsValidate($post) {
 		
-		return $this->db->row('SELECT posts.*, categories.`name` as `cat_name`, categories.`slug` as `cat_slug`FROM posts INNER JOIN categories ON (posts.`category_id`= categories.`category_id`)WHERE posts.`visibility`= 1 ORDER BY id DESC ');
+		$textLen = iconv_strlen($_POST['password']);
+		if (!filter_var($post['email'], FILTER_VALIDATE_EMAIL)) {
+			$this->error = 'E-mail указан неверно';
+			return false;
+		} elseif ($post['password'] !== $post['repassword']) {
+			$this->error = 'Пароли не совпадают';
+			return false;
+		}
+		return true;
+    }
+
+	public function postsList($route) {
+	
+		return $this->db->row('SELECT posts.*,users.`username` as `username`, categories.`name` as `cat_name`, categories.`slug` as `cat_slug`FROM posts INNER JOIN categories ON (posts.`category_id`= categories.`category_id`) INNER JOIN users ON (posts.`user_id`= users.`id`) WHERE posts.`visibility`= 1 ORDER BY id DESC ');
 	}
 	public function postsListcurrnetUser($user_id) {
 		return $this->db->row('SELECT * FROM posts WHERE user_id = "'.$user_id.'"');
@@ -87,9 +100,19 @@ class Main extends Model {
 		return $this->db->row('SELECT posts.*, categories.`name` as `cat_name`, categories.`description` as `cat_desc` FROM posts INNER JOIN categories ON (posts.`category_id`= categories.`category_id`) WHERE categories.`slug` ="'.$slug.'"');
 	}
 
+	public function authorpostsList($route) {
+		return $this->db->row('SELECT posts.*,users.`username` as `username`, categories.`name` as `cat_name`, categories.`slug` as `cat_slug`FROM posts INNER JOIN categories ON (posts.`category_id`= categories.`category_id`) INNER JOIN users ON (posts.`user_id`= users.`id`) WHERE posts.`user_id`= "'.$route.'"  ORDER BY id DESC ');
+		
+		return $this->db->row('SELECT posts.*, categories.`name` as `cat_name`, categories.`description` as `cat_desc` FROM posts INNER JOIN categories ON (posts.`category_id`= categories.`category_id`) WHERE categories.`slug` ="'.$slug.'"');
+	}
+
 	public function categorySelected($slug) {
 		
 		return $this->db->row('SELECT * FROM categories WHERE categories.`slug` ="'.$slug.'"');
+	}
+	public function AuthorSelected($route) {
+		
+		return $this->db->row('SELECT username FROM users WHERE id ="'.$route.'"');
 	}
 
 	public function register($post){
@@ -114,6 +137,17 @@ class Main extends Model {
 		return $this->db->column('SELECT id FROM posts WHERE id ="'.$id.'"');
 
 	}
+
+	public function isPostExistsToAuthor($user_id){
+
+		return $this->db->row('SELECT * FROM posts WHERE user_id ="'.$user_id.'"');
+
+	}
+	public function isAuthorExists($user_id){
+
+		return $this->db->column('SELECT id FROM users WHERE id ="'.$user_id.'"');
+
+	}
 	public function isPostBelongToUser($user_id, $id){
 
 		return $this->db->column('SELECT id FROM posts WHERE user_id ="'.$user_id.'" and id ="'.$id.'"');
@@ -123,8 +157,15 @@ class Main extends Model {
 
 	$this->db->column('DELETE FROM posts WHERE id ="'.$id.'"');
 		 unlink('materials/'.$id.'.jpg');
-
 	}
-	
+	public function UserSettings($post, $id){
+		$params = [
+			'id' => $id,
+			'email'=> $post['email'],
+			'password' => md5($post['password']),
+		];
+		
+		return $this->db->query('UPDATE users SET id = :id, email = :email, password = :password WHERE id = :id', $params);
+	}
 
 }
