@@ -2,7 +2,7 @@
 
 namespace application\models;
 use application\core\Model;
-
+use application\core\Config;	
 class Admin extends Model {
 	
 
@@ -11,7 +11,7 @@ class Admin extends Model {
 
 	public function loginValidate($post) {
 
-		$config = require '../application/config/admin.php';
+		$config = Config::getConfig('admin');
 		if ($config['login'] != $_POST['login'] or $config['password'] != $_POST['password']) {
 			$this->error = 'Ошибка входа';
 			return false;

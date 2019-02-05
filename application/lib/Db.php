@@ -1,7 +1,7 @@
 <?php
 
 namespace application\lib;
-
+use application\core\Config;	
 use PDO;
 
 class Db {
@@ -9,7 +9,7 @@ class Db {
 	protected $db;
 	
 	public function __construct() {
-		$config = require PATH.'/application/config/db.php';
+		$config = Config::getConfig('db');
 		$this->db = new PDO('mysql:host='.$config['host'].';dbname='.$config['name'].'', $config['user'], $config['password']);
 	}
 

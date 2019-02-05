@@ -8,6 +8,7 @@ function debug($str) { //дебагер
 	echo '</pre>';
 	exit;
 }
+
 spl_autoload_register('autoload');
 
 function autoload($class){

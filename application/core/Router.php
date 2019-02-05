@@ -10,8 +10,7 @@ class Router {
 	protected $params = []; //контроллеры и экшены в массиве
 	
 	function __construct(){
-			
-		$arr = require PATH.'application/config/routes.php'; // подключаем массив роутов
+		$arr = Config::getConfig('routes');	// подключаем массив роутов
 		foreach ($arr as $key => $value) {
 			$this->add($key,$value); //записываем в function Add() - $route and $params
 		}
