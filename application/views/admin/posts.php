@@ -17,7 +17,7 @@
                                 </tr>
                                 <?php foreach ($list as $val): ?>
                                     <tr>
-                                        <td><?php echo htmlspecialchars($val['name'], ENT_QUOTES); ?></td>
+                                        <td><?php echo htmlspecialchars($val['title'], ENT_QUOTES); ?></td>
                                         <td><?php if ($val['visibility'] ==1): ?>
                                             Published
                                         <?php else: ?>

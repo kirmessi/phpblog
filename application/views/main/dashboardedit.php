@@ -14,7 +14,7 @@
                         <form action="/dashboard/edit/{{data.id}}" method="post" enctype="multipart/form-data">
                             <div class="form-group">
                                 <label>Post title</label>
-                                <input class="form-control" type="text" value="{{data.name|escape}}" name="name">
+                                <input class="form-control" type="text" value="{{data.title|escape}}" name="title">
                             </div>
                             <div class="form-group">
                                 <label>Post slug</label>
@@ -39,7 +39,7 @@
                             
                             <option value ="{{category.category_id}}" 
                             {%if category.category_id == data.category_id %}
-                          selected{% endif %} >{{category.name}}</option>
+                          selected{% endif %} >{{category.title}}</option>
                          
                             {% endfor %}
                               </select>

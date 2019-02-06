@@ -8,7 +8,7 @@
     {% for val in list %}
     <div class="post-preview">
         <a href="/post/{{val.slug}}">
-        <h2 class="post-title">{{val.name}}</h2>
+        <h2 class="post-title">{{val.title}}</h2>
         <h5 class="post-subtitle">{{val.description}}</h5>
         </a>
         <div class="row">

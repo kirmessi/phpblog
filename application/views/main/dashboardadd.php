@@ -14,7 +14,7 @@
                         <form action="/dashboard/add/" method="post" enctype="multipart/form-data">
                             <div class="form-group">
                                 <label>Post title</label>
-                                <input class="form-control" type="text" name="name">
+                                <input class="form-control" type="text" name="title">
                             </div>
                             <div class="form-group">
                                 <label>Post slug</label>
@@ -37,7 +37,7 @@
                             <select class="form-control select2 select2-hidden-accessible" name="category_id" data-placeholder="Select a Category" style="width: 100%;" tabindex="-1" aria-hidden="true">
                               {% for category in categories %}
                             
-                             <option value="{{category.category_id}}">{{category.name}}</option>
+                             <option value="{{category.category_id}}">{{category.title}}</option>
                            
                           
                             {% endfor %}

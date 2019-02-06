@@ -8,7 +8,7 @@
                         <form action="/admin/category/edit/<?php echo $data['category_id']; ?>" method="post" enctype="multipart/form-data" >
                             <div class="form-group">
                                 <label>Title</label>
-                                <input class="form-control" type="text" value="<?php echo htmlspecialchars($data['name'], ENT_QUOTES); ?>" name="name">
+                                <input class="form-control" type="text" value="<?php echo htmlspecialchars($data['title'], ENT_QUOTES); ?>" name="title">
                             </div>
                             <div class="form-group">
                                 <label>Category slug</label>

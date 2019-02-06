@@ -26,7 +26,7 @@
                                 </tr>
                                 {% for post in posts %}
                                     <tr>
-                                        <td>{{post.name}}</td>
+                                        <td>{{post.title}}</td>
                                         <td>{% if post.visibility == 1 %}
                                             Published
                                         {% else %}

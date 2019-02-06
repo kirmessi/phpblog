@@ -18,7 +18,7 @@
                                 </tr>
                                 <?php foreach ($list as $val): ?>
                                     <tr>
-                                        <td><?php echo htmlspecialchars($val['name'], ENT_QUOTES); ?></td>
+                                        <td><?php echo htmlspecialchars($val['title'], ENT_QUOTES); ?></td>
                                         <td><a href="/admin/category/edit/<?php echo $val['category_id']; ?>" class="btn btn-primary">Edit</a></td>
                                         <td><a href="/admin/category/delete/<?php echo $val['category_id']; ?>" class="btn btn-danger">Delete</a></td>
                                     </tr>

@@ -15,7 +15,7 @@ abstract class Controller {
 	public function __construct($route){
 		
 		$this->route = $route;
-		//debug($route);
+		
 		//$_SESSION['admin'] =1;
 		//debug($this->checkAcl());
 		if (!$this->checkAcl()) { 
@@ -24,7 +24,9 @@ abstract class Controller {
 
 				
 		$this->view = new View($route); // создание экземпляра класса 
+
 		$this->model = $this->loadModel($route['controller']); // подгружаем модель по $path контроллера
+
 		
 
 	}

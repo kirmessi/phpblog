@@ -10,7 +10,7 @@
                         <form action="/admin/post/edit/<?php echo $data['id']; ?>" method="post" enctype="multipart/form-data" >
                             <div class="form-group">
                                 <label>Title</label>
-                                <input class="form-control" type="text" value="<?php echo htmlspecialchars($data['name'], ENT_QUOTES); ?>" name="name">
+                                <input class="form-control" type="text" value="<?php echo htmlspecialchars($data['title'], ENT_QUOTES); ?>" name="title">
                             </div>
                             <div class="form-group">
                                 <label>Post slug</label>
@@ -34,7 +34,7 @@
                                <?php foreach ($list as $category): ?>
                                 <option value ="<?php echo $category['category_id'];?>" <?php if ($category['category_id'] == $data['category_id']): ?>
                                  selected
-                                <?php endif ?>><?php echo $category['name'];?></option>
+                                <?php endif ?>><?php echo $category['title'];?></option>
                                 <?php endforeach ?>
                                 </select>
                             </div>

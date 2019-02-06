@@ -8,7 +8,7 @@
                         <form action="/admin/category/add" method="post" enctype="multipart/form-data">
                             <div class="form-group">
                                 <label>Title</label>
-                                <input class="form-control" type="text" name="name">
+                                <input class="form-control" type="text" name="title">
                             </div>
                             <div class="form-group">
                                 <label>Category slug</label>

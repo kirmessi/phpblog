@@ -45,7 +45,6 @@ class AdminController extends Controller {
 
 	public function postaddAction(){ 
 
-
 		if (!empty($_POST)) {
 			if (!$this->model->postValidate($_POST, 'add')) {
 				$this->view->message('Error', $this->model->error);
@@ -64,7 +63,7 @@ class AdminController extends Controller {
 			'list' => $this->model->categoriesList(),
 		];
 		$this->view->render('Add post', $vars);
-		
+
 	}
 
 

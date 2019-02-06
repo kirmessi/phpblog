@@ -9,7 +9,7 @@ class Main extends Model {
 	public $error;
 
 	public function contactValidate($post) {
-		$nameLen = iconv_strlen($_POST['name']);
+		$nameLen = iconv_strlen($_POST['title']);
 		$textLen = iconv_strlen($_POST['text']);
 		if ($nameLen < 3 or $nameLen > 20) {
 			$this->error = 'Имя должно содержать от 3 до 20 символов';
@@ -80,38 +80,38 @@ class Main extends Model {
 
 	public function postsList() {
 	
-		return $this->db->row('SELECT posts.*,users.`username` as `username`, categories.`name` as `cat_name`, categories.`slug` as `cat_slug`FROM posts INNER JOIN categories ON (posts.`category_id`= categories.`category_id`) INNER JOIN users ON (posts.`user_id`= users.`id`) WHERE posts.`visibility`= 1 ORDER BY id DESC ');
+		return $this->db->row('SELECT posts.*,users.`username` as `username`, categories.`title` as `cat_name`, categories.`slug` as `cat_slug`FROM posts INNER JOIN categories ON (posts.`category_id`= categories.`category_id`) INNER JOIN users ON (posts.`author_id`= users.`id`) WHERE posts.`visibility`= 1 ORDER BY id DESC ');
 	}
-	public function postsListcurrnetUser($user_id) {
+	public function postsListcurrnetUser($author_id) {
 		$params = [
-			'user_id' => $user_id,
+			'author_id' => $author_id,
 		];
-		return $this->db->row('SELECT * FROM posts WHERE user_id = :user_id', $params);
+		return $this->db->row('SELECT * FROM posts WHERE author_id = :author_id', $params);
 	}
 
 	public function postsListforAdmin($route) {
 		
-		return $this->db->row('SELECT posts.*, categories.`name` as `cat_name`, categories.`slug` as `cat_slug`FROM posts INNER JOIN categories ON (posts.`category_id`= categories.`category_id`) ORDER BY id DESC ');
+		return $this->db->row('SELECT posts.*, categories.`title` as `cat_name`, categories.`slug` as `cat_slug`FROM posts INNER JOIN categories ON (posts.`category_id`= categories.`category_id`) ORDER BY id DESC ');
 	}
-	public function postsListforUser($route, $user_id) {
+	public function postsListforUser($route, $author_id) {
 		$params = [
-			'user_id' => $user_id,
+			'author_id' => $author_id,
 		];
-		return $this->db->row('SELECT posts.*, categories.`name` as `cat_name`, categories.`slug` as `cat_slug`FROM posts INNER JOIN categories ON (posts.`category_id`= categories.`category_id`) WHERE posts.`user_id` = :user_id ORDER BY id DESC', $params);
+		return $this->db->row('SELECT posts.*, categories.`title` as `cat_name`, categories.`slug` as `cat_slug`FROM posts INNER JOIN categories ON (posts.`category_id`= categories.`category_id`) WHERE posts.`author_id` = :author_id ORDER BY id DESC', $params);
 	}
 
 	public function categorypostsList($slug) {
 		$params = [
 			'slug' => $slug,
 		];
-		return $this->db->row('SELECT posts.*, categories.`name` as `cat_name`, categories.`description` as `cat_desc` FROM posts INNER JOIN categories ON (posts.`category_id`= categories.`category_id`) WHERE categories.`slug` = :slug', $params);
+		return $this->db->row('SELECT posts.*, categories.`title` as `cat_name`, categories.`description` as `cat_desc` FROM posts INNER JOIN categories ON (posts.`category_id`= categories.`category_id`) WHERE categories.`slug` = :slug', $params);
 	}
 
-	public function authorpostsList($user_id) {
+	public function authorpostsList($author_id) {
 		$params = [
-			'user_id' => $user_id,
+			'author_id' => $author_id,
 		];
-		return $this->db->row('SELECT posts.*,users.`username` as `username`, categories.`name` as `cat_name`, categories.`slug` as `cat_slug`FROM posts INNER JOIN categories ON (posts.`category_id`= categories.`category_id`) INNER JOIN users ON (posts.`user_id`= users.`id`) WHERE posts.`user_id`= :user_id ORDER BY id DESC ' , $params);
+		return $this->db->row('SELECT posts.*,users.`username` as `username`, categories.`title` as `cat_name`, categories.`slug` as `cat_slug`FROM posts INNER JOIN categories ON (posts.`category_id`= categories.`category_id`) INNER JOIN users ON (posts.`author_id`= users.`id`) WHERE posts.`author_id`= :author_id ORDER BY id DESC ' , $params);
 	}
 
 	public function categorySelected($slug) {
@@ -139,14 +139,14 @@ class Main extends Model {
 
 	public function login($username){
 		$params = [
-			'username' => $post['username'],
+			'username' => $username['username'],
 		];
 		return $this->db->row('SELECT username FROM users WHERE username = :username', $params);
 		
 	}
 	public function loginId($username){
 		$params = [
-			'username' => $post['username'],
+			'username' => $username['username'],
 		];
 		return $this->db->row('SELECT id FROM users WHERE username = :username', $params);
 		
@@ -166,11 +166,11 @@ class Main extends Model {
 
 	}
 
-	public function isPostExistsToAuthor($user_id){
+	public function isPostExistsToAuthor($author_id){
 		$params = [
-			'user_id' => $user_id,
+			'author_id' => $author_id,
 		];
-		return $this->db->row('SELECT * FROM posts WHERE user_id = :user_id', $params);
+		return $this->db->row('SELECT * FROM posts WHERE author_id = :author_id', $params);
 
 	}
 	public function isAuthorExists($id){
@@ -180,12 +180,12 @@ class Main extends Model {
 		return $this->db->column('SELECT id FROM users WHERE id = :id', $params);
 
 	}
-	public function isPostBelongToUser($user_id, $id){
+	public function isPostBelongToUser($author_id, $id){
 		$params = [
-			'user_id' => $user_id,
+			'author_id' => $author_id,
 			'id' => $id,
 		];
-		return $this->db->column('SELECT id FROM posts WHERE user_id = :user_id and id = :id', $params);
+		return $this->db->column('SELECT id FROM posts WHERE author_id = :author_id and id = :id', $params);
 
 	}
 	public function postDeleteBelongToUser($id){ 

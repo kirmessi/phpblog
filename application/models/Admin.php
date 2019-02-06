@@ -24,7 +24,7 @@ class Admin extends Model {
 
 	public function postValidate($post, $type) {
 		
-		$nameLen = iconv_strlen($_POST['name']);
+		$nameLen = iconv_strlen($_POST['title']);
 		$descLen = iconv_strlen($_POST['description']);
 		$textLen = iconv_strlen($_POST['text']);
 		$slugLen = iconv_strlen($_POST['slug']);
@@ -57,7 +57,7 @@ class Admin extends Model {
 
 	public function categoryValidate($category) {
 		
-		$nameLen = iconv_strlen($_POST['name']);
+		$nameLen = iconv_strlen($_POST['title']);
 		
 
 		if ($nameLen < 3 or $nameLen > 20) {
@@ -72,10 +72,11 @@ class Admin extends Model {
 	//Посты
 
 	public function postAdd($post) {
+
 	if (!empty($_SESSION['authorize'])) {
-		$post['user_id'] = $_SESSION['authorize']['id'];
+		$post['author_id'] = $_SESSION['authorize']['id'];
 	} elseif(isset($_SESSION['admin'])) {
-		$post['user_id'] = 1;
+		$post['author_id'] = 1;
 	}
 	if (isset($_POST['visibility'])) {
 		$post['visibility'] = 1;
@@ -83,18 +84,18 @@ class Admin extends Model {
 	else {
 		$post['visibility'] = 0;
 	}
+
 	$params = [
-			'user_id' => $user_id,
+			'author_id' => $post['author_id'],
 			'slug'=> $post['slug'],
 			'category_id' => $post['category_id'],
-			'name' => $post['name'],
+			'title' => $post['title'],
 			'description' => $post['description'],
 			'text' => $post['text'],
 			'visibility' => $post['visibility'],
 		];
-	$this->db->query('INSERT INTO posts (user_id, slug, category_id, name, description, text, visibility)
-        VALUES (: user_id, :slug, :category_id, :name, :description, :text, :visibility)', $params);
-
+	$this->db->query('INSERT INTO posts (author_id, slug, category_id, title, description, text, visibility)
+        VALUES (:author_id, :slug, :category_id, :title, :description, :text, :visibility)', $params);
 			return $this->db->lastInsertId();
 	}
 
@@ -111,13 +112,13 @@ class Admin extends Model {
 			'id' => $id,
 			'slug'=> $post['slug'],
 			'category_id' => $post['category_id'],
-			'name' => $post['name'],
+			'title' => $post['title'],
 			'description' => $post['description'],
 			'text' => $post['text'],
 			'visibility' => $post['visibility'],
 		];
 		
-		return $this->db->query('UPDATE posts SET id = :id, slug = :slug, category_id = :category_id, name = :name,  description = :description, text = :text, visibility = :visibility WHERE id = :id', $params);
+		return $this->db->query('UPDATE posts SET id = :id, slug = :slug, category_id = :category_id, title = :title,  description = :description, text = :text, visibility = :visibility WHERE id = :id', $params);
 			
 	}
 
@@ -161,7 +162,7 @@ class Admin extends Model {
 			'slug'=> $slug,
 			
 		];
-			return $this->db->row('SELECT posts.*, categories.`name` as `cat_name` FROM posts INNER JOIN categories ON (posts.`category_id`= categories.`category_id`) WHERE posts.`slug` = :slug', $params);
+			return $this->db->row('SELECT posts.*, categories.`title` as `cat_name` FROM posts INNER JOIN categories ON (posts.`category_id`= categories.`category_id`) WHERE posts.`slug` = :slug', $params);
 	}
 	public function postDataAdmin($id) {
 		$params = [
@@ -169,7 +170,7 @@ class Admin extends Model {
 			'id'=> $id,
 			
 		];
-			return $this->db->row('SELECT posts.*, categories.`name` as `cat_name` FROM posts INNER JOIN categories ON (posts.`category_id`= categories.`category_id`) WHERE posts.`id` = :id', $params);
+			return $this->db->row('SELECT posts.*, categories.`title` as `cat_name` FROM posts INNER JOIN categories ON (posts.`category_id`= categories.`category_id`) WHERE posts.`id` = :id', $params);
 	}
 	
 ////////////////////////////////////////////////////////////////
@@ -178,11 +179,11 @@ class Admin extends Model {
 	public function categoryAdd($сategory) {
 		$params = [
 			
-			'name'=> $_POST['name'],
+			'title'=> $_POST['title'],
 			'slug'=> $_POST['slug'],
 			'description'=> $_POST['description'],
 		];
-	$this->db->query('INSERT INTO categories (name, slug, description) VALUES ( :name, :slug, :description)', $params);
+	$this->db->query('INSERT INTO categories (title, slug, description) VALUES ( :title, :slug, :description)', $params);
 
 			return $this->db->lastInsertId();
 	}
@@ -190,11 +191,11 @@ class Admin extends Model {
 	public function categoryEdit($сategory,$id) {
 	$params = [
 			'category_id' => $id,
-			'name' => $сategory['name'],
+			'title' => $сategory['title'],
 			'slug' => $сategory['slug'],
 			'description' => $сategory['description'],			
 		];
-		$this->db->query('UPDATE categories SET name = :name, slug = :slug, description = :description WHERE category_id = :category_id', $params);
+		$this->db->query('UPDATE categories SET title = :title, slug = :slug, description = :description WHERE category_id = :category_id', $params);
 			
 	}
 
