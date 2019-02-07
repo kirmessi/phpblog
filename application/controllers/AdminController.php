@@ -8,12 +8,7 @@ use application\models\Main;
 
 class AdminController extends Controller {
 
-	
-
 	public function __construct($route){
-
-
-
 		parent::__construct($route);
 		$this->view->layout ='admin';
 		
@@ -108,9 +103,9 @@ class AdminController extends Controller {
 
 	public function postsAction() {
 		$mainModel = new Main;
-		/*$pagination = new Pagination($this->route, $mainModel->postsCount());*/
+		
 		$vars = [
-			//'pagination' => $pagination->get(),
+	
 			'list' => $mainModel->postsListforAdmin($this->route),
 		];
 		$this->view->render('Посты', $vars);
@@ -119,9 +114,8 @@ class AdminController extends Controller {
 
 	public function categoriesAction() {
 		
-		/*$pagination = new Pagination($this->route, $mainModel->postsCount());*/
 		$vars = [
-			//'pagination' => $pagination->get(),
+
 			'list' => $this->model->categoriesList(),
 		];
 		$this->view->render('Категории', $vars);

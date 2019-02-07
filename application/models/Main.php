@@ -29,6 +29,11 @@ class Main extends Model {
     
 		$nameLen = iconv_strlen($_POST['username']);
 		$textLen = iconv_strlen($_POST['password']);
+		$params = [
+			
+			'username'=> $post['username'],
+			
+		];
 		if ($nameLen < 3 or $nameLen > 20) {
 			$this->error = 'Username должно содержать от 3 до 20 символов';
 			return false;
@@ -40,7 +45,7 @@ class Main extends Model {
 			return false;
 		}
 	
-		elseif ($this->db->column('SELECT count(*) username FROM users WHERE username="'.$post['username'].'"') > 0) {
+		elseif ($this->db->column('SELECT count(*) username FROM users WHERE username= :username', $params) > 0) {
    			$this->error = 'Такой логин уже есть!';
     		return false;
 		}   	
@@ -49,16 +54,28 @@ class Main extends Model {
 	}
 
 	public function loginValidate($post) {
+
+		$paramsusername = [
+			
+			'username'=> $post['username'],
+		];
+
 		if(isset($_SESSION['admin']))    {
 		$this->error = 'Вы уже зарегистрировались как админ!';
 		return false;
 		}
 
-	if($this->db->column('SELECT count(*) username FROM users WHERE username="'.$post['username'].'"') <= 0){
+	if($this->db->column('SELECT count(*) username FROM users WHERE username= :username', $paramsusername) <= 0){
     		$this->error = 'Такого логина не существует';
     		return false;
     	}
-    	if($this->db->column('SELECT count(*) password FROM users WHERE password="'.md5($post['password']).'"') <= 0){
+    	$userpass = [
+			
+			'username'=> $post['username'],
+		];
+    	$hash = $this->db->column('SELECT password FROM users WHERE username= :username', $userpass);
+    	
+    	if (!password_verify($post['password'], $hash)) {
     		$this->error = 'Пароль не верный';
     		return false;
     	}
@@ -131,7 +148,7 @@ class Main extends Model {
 		$params = [
 			'username' => $post['username'],
 			'email'=> $post['email'],
-			'password' => md5($post['password']),
+			'password' => password_hash($post['password'], PASSWORD_DEFAULT),
 		];
 		return $this->db->query('INSERT INTO users (username, email, password)
         VALUES (:username , :email, :password)', $params);
@@ -199,7 +216,7 @@ class Main extends Model {
 		$params = [
 			'id' => $id,
 			'email'=> $post['email'],
-			'password' => md5($post['password']),
+			'password' => password_hash($post['password'], PASSWORD_DEFAULT),
 		];
 		
 		return $this->db->query('UPDATE users SET id = :id, email = :email, password = :password WHERE id = :id', $params);

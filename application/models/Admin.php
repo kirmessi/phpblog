@@ -28,6 +28,11 @@ class Admin extends Model {
 		$descLen = iconv_strlen($_POST['description']);
 		$textLen = iconv_strlen($_POST['text']);
 		$slugLen = iconv_strlen($_POST['slug']);
+		$params = [
+			
+			'slug'=> $post['slug'],
+			
+		];
 
 		if ($nameLen < 3 or $nameLen > 150) {
 			$this->error = 'Имя должно содержать от 3 до 20 символов';
@@ -41,7 +46,7 @@ class Admin extends Model {
 		} elseif ($slugLen < 4 or $slugLen  > 50 and $type == 'add') {
 			$this->error = 'Адрес должен содержать от 4 до 50 символов';
 			return false;
-		} elseif($this->db->column('SELECT count(*) slug FROM posts WHERE slug="'.$post['slug'].'"') > 0 and $type == 'add') {
+		} elseif($this->db->column('SELECT count(*) slug FROM posts WHERE slug= :slug', $params) > 0 and $type == 'add') {
    			$this->error = 'Такой адрес уже есть!';
     		return false;
 		}   	
@@ -58,8 +63,6 @@ class Admin extends Model {
 	public function categoryValidate($category) {
 		
 		$nameLen = iconv_strlen($_POST['title']);
-		
-
 		if ($nameLen < 3 or $nameLen > 20) {
 			$this->error = 'Имя должно содержать от 3 до 20 символов';
 			return false;

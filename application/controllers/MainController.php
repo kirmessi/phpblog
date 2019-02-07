@@ -67,7 +67,6 @@ class MainController extends Controller {
 			'author'=>$this->model->AuthorSelected($this->route['id'])[0], 
 		];
 		$this->view->rendertwig($this->route,$vars);
-		//$this->view->render('sadsada',$vars);
 	}
 
 	public function loginAction(){ 
@@ -200,7 +199,6 @@ class MainController extends Controller {
 			'session'   => $_SESSION,
 		];
 		$this->view->rendertwig($this->route, $vars);
-		//$this->view->render('adas',$vars);
 	}
 
 	public function logoutAction(){
