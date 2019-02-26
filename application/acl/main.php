@@ -10,10 +10,19 @@ return [
 		'about',
 		'post',
 		'category',
+		'login',
+		'register',
+		'author',
+
 	],
 	'authorize' => [
 
-		//
+		'dashboard',
+		'dashboardadd',
+		'dashboardedit',
+		'dashboarddelete',
+		'dashboardsettings',
+		'logout',
 	],
 	'guest' => [
 

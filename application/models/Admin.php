@@ -2,7 +2,7 @@
 
 namespace application\models;
 use application\core\Model;
-
+use application\core\Config;	
 class Admin extends Model {
 	
 
@@ -10,7 +10,8 @@ class Admin extends Model {
 
 
 	public function loginValidate($post) {
-		$config = require '../application/config/admin.php';
+
+		$config = Config::getConfig('admin');
 		if ($config['login'] != $_POST['login'] or $config['password'] != $_POST['password']) {
 			$this->error = 'Ошибка входа';
 			return false;
@@ -23,9 +24,15 @@ class Admin extends Model {
 
 	public function postValidate($post, $type) {
 		
-		$nameLen = iconv_strlen($_POST['name']);
+		$nameLen = iconv_strlen($_POST['title']);
 		$descLen = iconv_strlen($_POST['description']);
 		$textLen = iconv_strlen($_POST['text']);
+		$slugLen = iconv_strlen($_POST['slug']);
+		$params = [
+			
+			'slug'=> $post['slug'],
+			
+		];
 
 		if ($nameLen < 3 or $nameLen > 150) {
 			$this->error = 'Имя должно содержать от 3 до 20 символов';
@@ -36,7 +43,13 @@ class Admin extends Model {
 		} elseif ($textLen < 10 or $textLen  > 5000) {
 			$this->error = 'Описание должно содержать от 10 до 5000 символов';
 			return false;
-		}
+		} elseif ($slugLen < 4 or $slugLen  > 50 and $type == 'add') {
+			$this->error = 'Адрес должен содержать от 4 до 50 символов';
+			return false;
+		} elseif($this->db->column('SELECT count(*) slug FROM posts WHERE slug= :slug', $params) > 0 and $type == 'add') {
+   			$this->error = 'Такой адрес уже есть!';
+    		return false;
+		}   	
 
 		if (empty($_FILES['img']['tmp_name']) and $type == 'add') {
 			$this->error = 'Изображение не загружено';
@@ -49,9 +62,7 @@ class Admin extends Model {
 
 	public function categoryValidate($category) {
 		
-		$nameLen = iconv_strlen($_POST['name']);
-		
-
+		$nameLen = iconv_strlen($_POST['title']);
 		if ($nameLen < 3 or $nameLen > 20) {
 			$this->error = 'Имя должно содержать от 3 до 20 символов';
 			return false;
@@ -64,26 +75,53 @@ class Admin extends Model {
 	//Посты
 
 	public function postAdd($post) {
-	
-	$this->db->query('INSERT INTO posts (slug, category_id, name, description, text)
-        VALUES ("'.$post['slug'].'","'.$post['category_id'].'", "'.$post['name'].'", "'.$post['description'].'", "'.$post['text'].'")');
 
+	if (!empty($_SESSION['authorize'])) {
+		$post['author_id'] = $_SESSION['authorize']['id'];
+	} elseif(isset($_SESSION['admin'])) {
+		$post['author_id'] = 1;
+	}
+	if (isset($_POST['visibility'])) {
+		$post['visibility'] = 1;
+	}
+	else {
+		$post['visibility'] = 0;
+	}
+
+	$params = [
+			'author_id' => $post['author_id'],
+			'slug'=> $post['slug'],
+			'category_id' => $post['category_id'],
+			'title' => $post['title'],
+			'description' => $post['description'],
+			'text' => $post['text'],
+			'visibility' => $post['visibility'],
+		];
+	$this->db->query('INSERT INTO posts (author_id, slug, category_id, title, description, text, visibility)
+        VALUES (:author_id, :slug, :category_id, :title, :description, :text, :visibility)', $params);
 			return $this->db->lastInsertId();
 	}
 
 
 
 	public function postEdit($post,$id) {
+		if (isset($_POST['visibility'])) {
+		$post['visibility'] = 1;
+	}
+	else {
+		$post['visibility'] = 0;
+	}
 	$params = [
 			'id' => $id,
 			'slug'=> $post['slug'],
 			'category_id' => $post['category_id'],
-			'name' => $post['name'],
+			'title' => $post['title'],
 			'description' => $post['description'],
 			'text' => $post['text'],
+			'visibility' => $post['visibility'],
 		];
 		
-		return $this->db->query('UPDATE posts SET id = :id, slug = :slug, category_id = :category_id, name = :name,  description = :description, text = :text WHERE id = :id', $params);
+		return $this->db->query('UPDATE posts SET id = :id, slug = :slug, category_id = :category_id, title = :title,  description = :description, text = :text, visibility = :visibility WHERE id = :id', $params);
 			
 	}
 
@@ -92,37 +130,63 @@ class Admin extends Model {
 	}
 
 	public function isPostExists($slug){
-
-		return $this->db->column('SELECT slug FROM posts WHERE slug ="'.$slug.'"');
+		$params = [
+			
+			'slug'=> $slug,
+			
+		];
+		return $this->db->column('SELECT slug FROM posts WHERE slug = :slug', $params);
 
 	}
 	public function isPostExistsAdmin($id){
-
-		return $this->db->column('SELECT id FROM posts WHERE id ="'.$id.'"');
+		$params = [
+			
+			'id'=> $id,
+			
+		];
+		return $this->db->column('SELECT id FROM posts WHERE id = :id', $params);
 
 	}
-
 	
 	public function postDelete($id){
-
-		 $this->db->column('DELETE FROM posts WHERE id ="'.$id.'"');
+		$params = [
+			
+			'id'=> $id,
+			
+		];
+		 $this->db->column('DELETE FROM posts WHERE id = :id', $params);
 		 unlink('materials/'.$id.'.jpg');
 	}
 	
 //////////////////////////////////////////////////////
 	public function postData($slug) {
-			return $this->db->row('SELECT posts.*, categories.`name` as `cat_name` FROM posts INNER JOIN categories ON (posts.`category_id`= categories.`category_id`) WHERE posts.`slug` = "'.$slug.'"');
+		$params = [
+			
+			'slug'=> $slug,
+			
+		];
+			return $this->db->row('SELECT posts.*, categories.`title` as `cat_name` FROM posts INNER JOIN categories ON (posts.`category_id`= categories.`category_id`) WHERE posts.`slug` = :slug', $params);
 	}
 	public function postDataAdmin($id) {
-			return $this->db->row('SELECT posts.*, categories.`name` as `cat_name` FROM posts INNER JOIN categories ON (posts.`category_id`= categories.`category_id`) WHERE posts.`id` = "'.$id.'"');
+		$params = [
+			
+			'id'=> $id,
+			
+		];
+			return $this->db->row('SELECT posts.*, categories.`title` as `cat_name` FROM posts INNER JOIN categories ON (posts.`category_id`= categories.`category_id`) WHERE posts.`id` = :id', $params);
 	}
 	
 ////////////////////////////////////////////////////////////////
 	//Категориии
 
 	public function categoryAdd($сategory) {
-	
-	$this->db->query('INSERT INTO categories (name, slug, description) VALUES ("'.$_POST['name'].'", "'.$_POST['slug'].'", "'.$_POST['description'].'")');
+		$params = [
+			
+			'title'=> $_POST['title'],
+			'slug'=> $_POST['slug'],
+			'description'=> $_POST['description'],
+		];
+	$this->db->query('INSERT INTO categories (title, slug, description) VALUES ( :title, :slug, :description)', $params);
 
 			return $this->db->lastInsertId();
 	}
@@ -130,39 +194,61 @@ class Admin extends Model {
 	public function categoryEdit($сategory,$id) {
 	$params = [
 			'category_id' => $id,
-			'name' => $сategory['name'],
+			'title' => $сategory['title'],
 			'slug' => $сategory['slug'],
 			'description' => $сategory['description'],			
 		];
-		$this->db->query('UPDATE categories SET name = :name, slug = :slug, description = :description WHERE category_id = :category_id', $params);
+		$this->db->query('UPDATE categories SET title = :title, slug = :slug, description = :description WHERE category_id = :category_id', $params);
 			
 	}
 
-	public function categoryDelete($id){
-
-		 $this->db->column('DELETE FROM categories WHERE category_id ="'.$id.'"');
+	public function categoryDelete($category_id){
+		$params = [
+			
+			'category_id'=> $category_id,
+			
+		];
+		 $this->db->column('DELETE FROM categories WHERE category_id = :category_id', $params);
 		 
 	}
-	public function isCategoryExistsAdmin($id){
-
-		return $this->db->column('SELECT category_id FROM categories WHERE category_id ="'.$id.'"');
+	public function isCategoryExistsAdmin($category_id){
+		$params = [
+			
+			'category_id'=> $category_id,
+			
+		];
+		return $this->db->column('SELECT category_id FROM categories WHERE category_id = :category_id', $params);
 
 	}
 
 	public function isCategoryExists($slug){
-
-		return $this->db->column('SELECT slug FROM categories WHERE slug ="'.$slug.'"');
+		$params = [
+			
+			'slug'=> $slug,
+			
+		];
+		return $this->db->column('SELECT slug FROM categories WHERE slug = :slug', $params);
 
 	}
-	public function categoryDataAdmin($id) {
-			return $this->db->row('SELECT * FROM categories WHERE category_id ="'.$id.'"');
+	public function categoryDataAdmin($category_id) {
+		$params = [
+			
+			'category_id'=> $category_id,
+			
+		];
+			return $this->db->row('SELECT * FROM categories WHERE category_id = :category_id', $params);
 	}
-	///////////////////////////////
+
 	public function categoryData($slug) {
-			return $this->db->row('SELECT * FROM categories WHERE slug ="'.$slug.'"');
+		$params = [
+			
+			'slug'=> $slug,
+			
+		];
+			return $this->db->row('SELECT * FROM categories WHERE slug = :slug', $params);
 	}
-///////////////////////////////////////////////
-	public function categoriesList($route) {
+
+	public function categoriesList() {
 		
 		return $this->db->row('SELECT * FROM categories ORDER BY category_id');
 	}

@@ -15,7 +15,7 @@ abstract class Controller {
 	public function __construct($route){
 		
 		$this->route = $route;
-		//debug($route);
+		
 		//$_SESSION['admin'] =1;
 		//debug($this->checkAcl());
 		if (!$this->checkAcl()) { 
@@ -24,7 +24,9 @@ abstract class Controller {
 
 				
 		$this->view = new View($route); // создание экземпляра класса 
+
 		$this->model = $this->loadModel($route['controller']); // подгружаем модель по $path контроллера
+
 		
 
 	}
@@ -49,10 +51,10 @@ abstract class Controller {
 		if ($this->isAcl('all')) { //уровень доступа дял всех  
 			return true;
 		}
-		elseif  (isset($_SESSION['authorize']['id']) and $this->isAcl('authorize')) { ///только для авторизированных
+		elseif  (isset($_SESSION['authorize']) and $this->isAcl('authorize')) { ///только для авторизированных
 			return true; 
 		}
-		elseif  (!isset($_SESSION['authorize']['id']) and $this->isAcl('guest')) { //для гостей
+		elseif  (!isset($_SESSION['authorize']) and $this->isAcl('guest')) { //для гостей
 			return true;
 		}
 		elseif  (isset($_SESSION['admin']) and $this->isAcl('admin')) { //для админа

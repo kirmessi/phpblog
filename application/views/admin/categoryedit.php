@@ -7,18 +7,18 @@
                     <div class="col-sm-4">
                         <form action="/admin/category/edit/<?php echo $data['category_id']; ?>" method="post" enctype="multipart/form-data" >
                             <div class="form-group">
-                                <label>Название</label>
-                                <input class="form-control" type="text" value="<?php echo htmlspecialchars($data['name'], ENT_QUOTES); ?>" name="name">
+                                <label>Title</label>
+                                <input class="form-control" type="text" value="<?php echo htmlspecialchars($data['title'], ENT_QUOTES); ?>" name="title">
                             </div>
                             <div class="form-group">
-                                <label>Адрес категории</label>
+                                <label>Category slug</label>
                                 <input class="form-control" type="text" value="<?php echo htmlspecialchars($data['slug'], ENT_QUOTES); ?>" name="slug">
                             </div>
                             <div class="form-group">
-                                <label>Описание категории</label>
+                                <label>Short description</label>
                                 <input class="form-control" type="text" value="<?php echo htmlspecialchars($data['description'], ENT_QUOTES); ?>" name="description">
                             </div>
-                            <button type="submit" class="btn btn-primary btn-block">Сохранить</button>
+                            <button type="submit" class="btn btn-primary btn-block">Save</button>
                         </form>
                     </div>
                 </div>

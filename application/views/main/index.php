@@ -1,4 +1,4 @@
-
+<?php debug($list);?>
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -27,8 +27,32 @@
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="/contact">Contacts</a>
-                        </li>
                         
+                        {% if session.authorize is defined %}
+                        <li class="nav-item dropdown">
+                        <a href="#" data-toggle="dropdown" class="nav-link dropdown-toggle">Profile <b class="caret"></b></a>
+                        <ul class="dropdown-menu">
+
+                            <li><a href="/dashboard" class="nav-link">My posts</a></li>
+
+                            <li><a href="/dashboard/add" class="nav-link">Add post</a></li>
+
+                            <li><a href="/dashboard/settings" class="nav-link">Settigns</a></li>
+                        </ul>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/logout">Logout</a>
+                        </li>
+                        {% else %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="/login">Sign in</a>
+                        </li>
+                        {% endif %}
+                        {% if session.authorize is not defined %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="/register">Register</a>
+                        </li>
+                        {% endif %}
                     </ul>
                 </div>
             </div>
@@ -52,13 +76,15 @@
                 {% for val in list %}
                     <div class="post-preview">
                         <a href="/post/{{val.slug}}">
-                            <h2 class="post-title">{{val.name}}</h2>
+                            <h2 class="post-title">{{val.title}}</h2>
                             <h5 class="post-subtitle">{{val.description}}</h5>
                         </a>
                        <div class="row">
-                        <div class="col-6">Создано: {{val.date}}</div>
+                        <div class="col-6">Created at:                        {{val.date}}</div>
                         <div class="col-6"><a href="/category/{{val.cat_slug}}">{{val.cat_name}}</a></div>
                         </div>
+                      <div>Author: <a href="/author/{{val.author_id}}">{{val.username}}</a>
+                        </div>  
                     </div>
                     <hr>
                   {% endfor %}
@@ -67,7 +93,7 @@
     </div>
 </div>
         <hr>
-     
+     {{ pagination }}
     </body>
 </html>
 

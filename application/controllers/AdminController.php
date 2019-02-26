@@ -8,12 +8,7 @@ use application\models\Main;
 
 class AdminController extends Controller {
 
-	
-
 	public function __construct($route){
-
-
-
 		parent::__construct($route);
 		$this->view->layout ='admin';
 		
@@ -45,7 +40,6 @@ class AdminController extends Controller {
 
 	public function postaddAction(){ 
 
-
 		if (!empty($_POST)) {
 			if (!$this->model->postValidate($_POST, 'add')) {
 				$this->view->message('Error', $this->model->error);
@@ -53,17 +47,18 @@ class AdminController extends Controller {
 			
 			
 			$id = $this->model->postAdd($_POST);
-			//$this->model->categorypostsAdd();
+			
 			$this->model->postUploadImage($_FILES['img']['tmp_name'], $id);
 			$this->view->message('success', 'Пост добавлен');
+			
 		}
 
 		$vars = [
 			
-			'list' => $this->model->categoriesList($this->route),
+			'list' => $this->model->categoriesList(),
 		];
 		$this->view->render('Add post', $vars);
-		
+
 	}
 
 
@@ -89,7 +84,7 @@ class AdminController extends Controller {
 
 		$vars = [
 			'data' => $this->model->postDataAdmin($this->route['id'])[0],
-			'list' => $this->model->categoriesList($this->route),
+			'list' => $this->model->categoriesList(),
 			//'categories'=>$this->model->categoryPosts(), 
 		];
 		$this->view->render('Редактировать пост', $vars);
@@ -108,10 +103,10 @@ class AdminController extends Controller {
 
 	public function postsAction() {
 		$mainModel = new Main;
-		/*$pagination = new Pagination($this->route, $mainModel->postsCount());*/
+		
 		$vars = [
-			//'pagination' => $pagination->get(),
-			'list' => $mainModel->postsList($this->route),
+	
+			'list' => $mainModel->postsListforAdmin($this->route),
 		];
 		$this->view->render('Посты', $vars);
 	}
@@ -119,10 +114,9 @@ class AdminController extends Controller {
 
 	public function categoriesAction() {
 		
-		/*$pagination = new Pagination($this->route, $mainModel->postsCount());*/
 		$vars = [
-			//'pagination' => $pagination->get(),
-			'list' => $this->model->categoriesList($this->route),
+
+			'list' => $this->model->categoriesList(),
 		];
 		$this->view->render('Категории', $vars);
 	}

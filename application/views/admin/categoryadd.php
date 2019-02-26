@@ -7,18 +7,18 @@
                     <div class="col-sm-4">
                         <form action="/admin/category/add" method="post" enctype="multipart/form-data">
                             <div class="form-group">
-                                <label>Название категории</label>
-                                <input class="form-control" type="text" name="name">
+                                <label>Title</label>
+                                <input class="form-control" type="text" name="title">
                             </div>
                             <div class="form-group">
-                                <label>Адрес категории</label>
+                                <label>Category slug</label>
                                 <input class="form-control" type="text" name="slug">
                             </div>
                             <div class="form-group">
-                                <label>Описание категории</label>
+                                <label>Short description</label>
                                 <input class="form-control" type="text" name="description">
                             </div>
-                            <button type="submit" class="btn btn-primary btn-block">Добавить</button>
+                            <button type="submit" class="btn btn-primary btn-block">Add category</button>
                         </form>
                     </div>
                 </div>
